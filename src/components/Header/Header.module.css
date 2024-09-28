@@ -1,0 +1,323 @@
+.Header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 4.5em;
+    z-index: 5;
+  }
+  
+  .logo {
+    font-size: 1.25vw;
+  }
+  
+  .csHamburger {
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    font-family: "Nhaasgrotesktxpro 55rg", sans-serif;
+    font-weight: 400;
+    font-size: .75em;
+    display: flex;
+    align-items: center;
+  }
+  
+  .headerMenuButton {
+    cursor: pointer;
+  }
+  
+  .topHeaderIcon {
+    width: 2.27vw;
+  }
+  
+  .stickyHeader {
+    top: -100%;
+    left: 0px;
+    z-index: 99;
+    height: 100svh;
+    width: 100svw;
+    transition: all 1s;
+  }
+  
+  
+  .headingContainer {
+    padding: 0em 2em;
+    bottom: 4.3em;
+    width: 74.4%;
+    position: absolute;
+  }
+  
+  .stickyHeaderHeading {
+    font-size: 11.8vw;
+    transition: all 0.4s;
+    text-transform: uppercase;
+    line-height: .9;
+    letter-spacing: -1px;
+    color: #fff;
+  }
+  
+  .stickyHeaderHeading a {
+    color: inherit;
+    font-family: Drukcyr, sans-serif;
+  }
+  
+  .headerPoints {
+    height: 11.2vw;
+    transition: all 1s;
+    overflow: visible;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .headerPoints1:hover .stickyHeaderHeading,
+  .headerPoints2:hover .stickyHeaderHeading {
+    transform: translateY(-11.2vw);
+    color: var(--secondaryColor);
+  }
+  
+  .navBox {
+    width: 24.4%;
+    background-color: #222;
+    bottom: 4.3em;
+    right: 2.5em;
+    padding: 2.08em;
+    border-radius: 10px;
+    position: absolute;
+  }
+  
+  .navHeadingBox {
+    margin-bottom: 8em;
+  }
+  
+  .pointWhite {
+    width: .7em;
+    height: .7em;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+  
+  .navLink {
+    text-transform: uppercase;
+    font-family: Drukcyr, sans-serif;
+    font-size: 3.19em;
+    font-weight: 700;
+    line-height: .9;
+    color: #fff;
+    transition: all 0.3s;
+  }
+  
+  .navLink:hover {
+    color: #626262;
+  }
+  
+  .stickyHeaderSocial {
+    bottom: .7em;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .socialLink {
+    color: #fff;
+    margin-right: 2em;
+    transition: all 0.3s;
+  }
+  
+  .headerPolicies {
+    color: #fff;
+    transition: all 0.3s;
+    bottom: 1em;
+    left: 3.5em;
+  }
+  
+  .headerPolicies:hover,
+  .socialLink:hover {
+    color: #626262;
+  }
+  
+  .headerpolicesLink {
+    color: inherit;
+  }
+  
+  .headerCopyright {
+    color: #fff;
+    transition: all 0.3s;
+    bottom: 1em;
+    right: 3.5em
+  }
+  
+  @media screen and (max-width: 1350px) {
+    .logo {
+      font-size: 1.5vw;
+    }
+    .csHamburger{
+      font-size: 1em;
+    }
+    .topHeaderIcon{
+      width: 2.77vw;
+    }
+    .navHeadingBox .navHeading{
+      font-size: 1.2em;
+    }
+    .pointWhite{
+      width: .9em;
+      height: .9em;
+    }
+    .navLink{
+      font-size: 3.5em;
+    }
+  }
+  @media screen and (max-width: 992px) {
+    .Header{
+      height: 10svh;  
+    }
+    .logo {
+      font-size: 2.5em;
+    }
+    .csHamburger{
+      display: none;
+    }
+    .topHeaderIcon{
+      width: 4.3em;
+    }
+    .headingContainer, .navBox{
+      position: relative !important;
+      width: auto;
+      right: 0em;
+      margin: 0em 4em 0em 2em;
+      bottom: 5.5em
+    }
+    .headerheadingContainer{
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      flex-direction: column;
+    }
+    .navHeadingBox{
+      margin-bottom: 6em;
+    }
+    .headingContainer{
+      padding: 0em;
+      margin-bottom: 3em;
+    }
+    .navLinks{
+      display: grid;
+      grid-template-areas: "1f 1f 1f";
+      gap: 2em 0em;
+    }
+    .navLink{
+      font-size: 4em;
+    }
+    .stickyHeaderSocial{
+      bottom: 1em;
+    }
+    .headerPolicies, .socialLink, .headerCopyright{
+      font-size: 1.3em !important;
+    }
+  }
+  @media screen and (max-width: 650px) {
+    .logo {
+      font-size: 3.2em;
+    }
+    .topHeaderIcon{
+      width: 6em;
+    }
+    
+    .headerPoints{
+      height: 13.2em;
+    }
+    .headerPoints1:hover .stickyHeaderHeading,
+    .headerPoints2:hover .stickyHeaderHeading {
+      transform: translateY(-13.2vw);
+    }
+    .stickyHeaderHeading{
+      font-size: 13.5em;
+    }
+    .navLinks{
+      grid-template-areas: "1f 1f";
+      gap: 2.5em 0em;
+    }
+    .navHeadingBox .navHeading{
+      font-size: 2.2em;
+    }
+    .pointWhite{
+      width: 1.5em;
+      height: 1.5em;
+    }
+    
+    .navLink{
+      font-size: 5.3em;
+    }
+    .headingContainer, .navBox{
+      bottom: 5.8em
+    }
+    .headerCopyright{
+      display: none;
+    }
+    .headerPolicies{
+      bottom: .7em;
+    }
+    .stickyHeaderSocial{    
+      bottom: 1em;
+      left: 100%;
+      transform: translateX(-100%);
+    }
+    .headerPolicies, .socialLink{
+      font-size: 2em !important;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    .logo {
+      font-size: 4.2em;
+    }
+    .topHeaderIcon{
+      width: 7.3em;
+    }
+    .headingContainer, .navBox{
+      bottom: 8em
+    }
+    .headingContainer{
+      bottom: 12em
+    }
+    .headerPoints{
+      height: 18.2em;
+    }
+    .headerPoints1:hover .stickyHeaderHeading,
+    .headerPoints2:hover .stickyHeaderHeading {
+      transform: translateY(-18.2vw);
+    }
+    .stickyHeaderHeading{
+      font-size: 18em;
+    }
+    .navBox{
+      padding: 5em;
+      margin: 0em 10em 0em 2em;
+    }
+    .navHeadingBox .navHeading{
+      font-size: 2.7em;
+    }
+    .pointWhite{
+      width: 2em;
+      height: 2em;
+    }
+    .navLinks{
+      grid-template-areas: "1f";
+      gap: 2em 0em;
+    }
+    .navLink{
+      font-size: 8em;
+    }
+    .headerPolicies, .socialLink{
+      font-size: 2.5em !important;
+    }
+    .socialLink{
+      margin-right: 1.5em;
+    }
+    .stickyHeaderSocial{
+      bottom: 1.6em;
+    }
+    .headerPolicies{
+      bottom: .8em;
+      left: 2.5em;
+    }
+  }
