@@ -1,0 +1,116 @@
+.page {
+  padding: 80px 32px 64px;
+  max-width: 1300px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pageTitle {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin: 0 0 6px;
+}
+
+.pageSub { font-size: 0.88rem; color: var(--text-secondary); margin: 0; }
+
+.csvBtn {
+  padding: 9px 20px;
+  border-radius: 8px;
+  background: #FFC107;
+  color: #000;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  outline: none;
+}
+.csvBtn:hover { color: #000; transform: scale(1.08); }
+
+.tableWrap {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.loading {
+  padding: 60px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.table { width: 100%; border-collapse: collapse; }
+
+.headRow { background: var(--bg-card); }
+
+.th {
+  padding: 13px 18px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.row {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--bg-hover); }
+
+.td { padding: 16px 18px; vertical-align: middle; }
+
+.coinCell { display: flex; align-items: center; gap: 12px; }
+
+.coinIcon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.coinName   { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); }
+.coinTicker { font-size: 0.68rem; font-weight: 700; font-family: var(--font-mono); letter-spacing: 0.05em; }
+.avgPrice   { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; color: var(--text-primary); }
+
+.hiPrice { font-family: var(--font-mono); font-size: 0.84rem; font-weight: 600; color: var(--green); margin-right: 6px; }
+.loPrice { font-family: var(--font-mono); font-size: 0.84rem; font-weight: 600; color: var(--red);   margin-right: 6px; }
+.exName  { font-size: 0.72rem; color: var(--text-muted); }
+
+.spreadVal { font-family: var(--font-mono); font-size: 0.84rem; color: var(--text-secondary); }
+
+.detailBtn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.row:hover .detailBtn { opacity: 1; }
+
+@media (max-width: 768px) {
+  .page { padding: 76px 16px 48px; }
+  .tableWrap { overflow-x: auto; }
+}

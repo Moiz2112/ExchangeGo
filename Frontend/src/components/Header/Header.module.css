@@ -1,0 +1,226 @@
+/* ── Header — always black ── */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  background: #0b0e11;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 200;
+}
+
+.inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Logo ── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.logoMark {
+  width: 34px; height: 34px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 800; color: #000;
+}
+
+.logoName {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+/* ── Nav — centered, takes up all the space between logo and right ── */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  padding: 0 48px;
+}
+
+.navItem {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  padding: 8px 22px;
+  border-radius: 6px;
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.navItem:hover { color: #fff; background: rgba(255,255,255,0.07); }
+
+.navBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.navActive { color: var(--accent) !important; font-weight: 600; }
+
+/* Chevron */
+.chevron { transition: transform 0.2s; }
+.chevronOpen { transform: rotate(180deg); }
+
+/* Nav dividers between links */
+.navDivider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255,255,255,0.12);
+  flex-shrink: 0;
+}
+
+/* ── Coins Dropdown ── */
+.dropWrap { position: relative; }
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  background: #1a1e24;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  padding: 8px;
+  animation: dropIn 0.18s ease;
+  z-index: 300;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.dropHeader {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3);
+  padding: 6px 10px 8px;
+}
+
+.dropItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background 0.12s;
+  font-family: var(--font-body);
+}
+.dropItem:hover { background: rgba(255,255,255,0.07); }
+
+.dropEmoji { font-size: 1rem; width: 22px; text-align: center; }
+.dropName  { font-size: 0.88rem; font-weight: 600; color: #eaecef; flex: 1; text-align: left; }
+.dropTicker { font-size: 0.68rem; font-weight: 700; font-family: var(--font-mono); letter-spacing: 0.05em; }
+
+/* ── Right ── */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Theme toggle */
+.themeBtn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.themeBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Auth */
+.authBtns { display: flex; gap: 8px; }
+
+.loginBtn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: none;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.loginBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.signupBtn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  background: var(--accent);
+  color: #000;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.signupBtn:hover { background: var(--accent-hover); }
+
+/* User area */
+.userArea { display: flex; align-items: center; gap: 8px; }
+
+.avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #000;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.username { font-size: 0.84rem; font-weight: 600; color: #fff; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.logoutBtn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.logoutBtn:hover { border-color: #f6465d; color: #f6465d; }
+
+@media (max-width: 768px) {
+  .inner { padding: 0 16px; }
+  .nav { padding: 0 16px; gap: 2px; }
+  .navItem { padding: 7px 12px; font-size: 0.85rem; }
+  .navDivider { display: none; }
+  .username { display: none; }
+  .logo { margin-right: 0; }
+}

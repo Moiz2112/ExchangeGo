@@ -1,0 +1,102 @@
+.footer {
+  background-color: #0b0e11;
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.footerContainer {
+  padding: 48px 32px 32px !important;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footerDomain {
+  font-family: var(--font-body);
+  font-size: 5vw;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: -0.03em;
+  margin-top: 40px;
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+  transition: color 0.3s;
+}
+
+.footerDomain:hover {
+  color: #fff;
+}
+
+.exchangeText {
+  color: #fff;
+}
+
+.goText {
+  color: #FFC107;
+}
+
+.footerSocial {
+  margin-bottom: 12px;
+}
+
+.footerSocial a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  position: relative;
+  padding-bottom: 2px;
+  color: #fff;
+  transition: all 0.2s;
+}
+
+.footerSocial a:hover {
+  color: #fff;
+}
+
+.footerSocial a::before {
+  content: "";
+  width: 0%;
+  height: 2px;
+  background-color: #FFC107;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s;
+}
+
+.footerSocial a:hover::before {
+  width: 100%;
+}
+
+.footerCopyright {
+  font-size: 0.78rem;
+  text-align: right;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+@media screen and (max-width: 1350px) {
+  .footerSocial a, .footerCopyright { font-size: 0.85rem; }
+  .footerDomain { font-size: 8vw; }
+}
+
+@media screen and (max-width: 992px) {
+  .footerSocial a, .footerCopyright { font-size: 0.9rem; }
+  .footerDomain { font-size: 10vw; }
+  .footerCopyright { text-align: left; margin-top: 16px; }
+}
+
+@media screen and (max-width: 650px) {
+  .footerSocial a, .footerCopyright { font-size: 0.95rem; }
+  .footerDomain { font-size: 13vw; }
+  .footerContainer { padding: 32px 20px 24px !important; }
+}
+
+@media screen and (max-width: 520px) {
+  .footerSocial a, .footerCopyright { font-size: 1rem; }
+  .footerDomain { font-size: 15vw; }
+}
