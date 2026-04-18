@@ -3,31 +3,31 @@ package consts
 type CURRENCY string
 
 const (
-	ETH  CURRENCY = "ETC"
-	BTC           = "BTC"
-	USDT          = "USDT"
-	BUSD          = "BUSD"
-	ADA           = "ADA"
-	DOGE          = "DOGE"
-	DOT           = "DOT"
-	LTC           = "LTC"
-	BCH           = "BCH"
-	XRP           = "XRP"
-	SOL           = "SOL"
-	LINK          = "LINK"
+	ETH  CURRENCY = "ETH"
+	BTC  CURRENCY = "BTC"
+	USDT CURRENCY = "USDT"
+	BUSD CURRENCY = "BUSD"
+	ADA  CURRENCY = "ADA"
+	DOGE CURRENCY = "DOGE"
+	DOT  CURRENCY = "DOT"
+	LTC  CURRENCY = "LTC"
+	BCH  CURRENCY = "BCH"
+	XRP  CURRENCY = "XRP"
+	SOL  CURRENCY = "SOL"
+	LINK CURRENCY = "LINK"
 )
 
 type EXCHANGE string
 
 const (
 	BINANCE  EXCHANGE = "BINANCE"
-	GATEIO            = "GATE.IO"
-	KRAKEN            = "KRAKEN"
-	COINBASE          = "COINBASE"
-	BITPAY            = "BITPAY"
-	BITFINEX          = "BITFINEX"
-	HUOBI             = "HUOBI"
-	BITSTAMP          = "BITSTAMP"
-	KUCOIN            = "KUCOIN"
-	OKX               = "OKX"
+	GATEIO   EXCHANGE = "GATE.IO"
+	KRAKEN   EXCHANGE = "KRAKEN"
+	COINBASE EXCHANGE = "COINBASE"
+	BITPAY   EXCHANGE = "BITPAY"
+	BITFINEX EXCHANGE = "BITFINEX"
+	HUOBI    EXCHANGE = "HUOBI"
+	BITSTAMP EXCHANGE = "BITSTAMP"
+	KUCOIN   EXCHANGE = "KUCOIN"
+	OKX      EXCHANGE = "OKX"
 )
