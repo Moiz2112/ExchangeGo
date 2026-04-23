@@ -10,7 +10,7 @@ const FEATURES = [
   },
   {
     icon: '🏦',
-    title: '9 Major Exchanges',
+    title: '8 Major Exchanges',
     desc: 'We aggregate from Binance, Coinbase, Kraken, Bitfinex, Bitstamp, Huobi, KuCoin, OKX and Gate.io — giving you the widest cross-exchange view available.',
   },
   {
@@ -43,7 +43,6 @@ const EXCHANGES = [
   { name: 'Bitstamp',  color: '#00aaee' },
   { name: 'Huobi',     color: '#1a56db' },
   { name: 'KuCoin',    color: '#23af91' },
-  { name: 'OKX',       color: '#ffffff' },
   { name: 'Gate.io',   color: '#e74c3c' },
 ];
 
@@ -122,7 +121,7 @@ const About = () => {
       {/* ── Stats bar ── */}
       <section className={styles.statsBar} ref={el => addRef(el as HTMLDivElement, 0)}>
         {[
-          { value: '9',    label: 'Exchanges'      },
+          { value: '8',    label: 'Exchanges'      },
           { value: '10',   label: 'Coins Tracked'  },
           { value: '7s',   label: 'Update Interval'},
           { value: '24/7', label: 'Live Data'       },

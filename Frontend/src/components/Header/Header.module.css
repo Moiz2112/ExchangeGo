@@ -2,7 +2,7 @@
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 64px;
+  height: 67px;
   background: #0b0e11;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   z-index: 200;
@@ -24,10 +24,11 @@
   gap: 10px;
   flex-shrink: 0;
   text-decoration: none;
+ padding: 5px 10px;
 }
 
 .logoMark {
-  width: 34px; height: 34px;
+  width: 40px; height: 34px;
   background: var(--accent);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
@@ -35,10 +36,15 @@
 }
 
 .logoName {
-  font-size: 1.05rem;
+  font-size: 1.09rem;
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.02em;
+}
+.logoImage {
+  width: 42px;     /* adjust as per your UI */
+  height: 42px;
+  object-fit: contain;
 }
 
 /* ── Nav — centered, takes up all the space between logo and right ── */

@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import LoginModal from '../LoginModal/LoginModal';
 import styles from './Header.module.css';
+//import navStyles from "./Navbar.module.css";
+import logo from "../../assets/fav.png"; 
 
 const COINS = [
   { id: 'bitcoin',      ticker: 'BTC', name: 'Bitcoin',      emoji: '₿', color: '#f7931a' },
@@ -51,10 +53,14 @@ export default function Header() {
         <div className={styles.inner}>
 
           {/* Logo — clicking goes to main dashboard (coin cards) */}
-          <Link to="/" className={styles.logo}>
-            <div className={styles.logoMark}>₿</div>
-            <span className={styles.logoName}>ExchangeGo</span>
-          </Link>
+        <Link to="/" className={styles.logo}>
+       <img 
+         src={logo} 
+         alt="ExchangeGo Logo" 
+         className={styles.logoImage} 
+       />
+  <span className={styles.logoName}>ExchangeGo</span>
+</Link>
 
           {/* Nav */}
           <nav className={styles.nav}>
