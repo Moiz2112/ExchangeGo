@@ -4,6 +4,8 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/userstore"  
+    "strconv"   
 )
 
 type newBitPayService struct {
@@ -23,6 +25,11 @@ func NewBitPayService(priceRepo ports.PriceRepository, broadcaster ports.BroadCa
 
 func (bitpay *newBitPayService) GetThePrice() {
 	bitpay.data = bitpay.priceRepo.Get(consts.BITPAY)
+	 for _, currency := range bitpay.data.Data.Currencies {
+        if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
+            userstore.GlobalStore.SavePrice(string(consts.BITPAY), currency.Name, price)
+        }
+    }
 	bitpay.BroadCast()
 	bitpay.WriteToQue()
 }

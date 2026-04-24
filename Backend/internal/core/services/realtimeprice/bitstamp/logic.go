@@ -4,6 +4,8 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/userstore"  
+    "strconv"    
 )
 
 type newBitstampService struct {
@@ -23,6 +25,11 @@ func NewBitstampService(priceRepo ports.PriceRepository, broadcaster ports.Broad
 
 func (bitstamp *newBitstampService) GetThePrice() {
 	bitstamp.data = bitstamp.priceRepo.Get(consts.BITSTAMP)
+	  for _, currency := range bitstamp.data.Data.Currencies {
+        if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
+            userstore.GlobalStore.SavePrice(string(consts.BITSTAMP), currency.Name, price)
+        }
+    }
 	bitstamp.BroadCast()
 	bitstamp.WriteToQue()
 }

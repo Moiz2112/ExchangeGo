@@ -44,9 +44,21 @@ func Init() {
 	if err != nil {
 		log.Fatalf("Failed to create users table: %v", err)
 	}
+	_, err = db.Exec(`
+    CREATE TABLE IF NOT EXISTS price_history (
+        id          SERIAL PRIMARY KEY,
+        exchange    TEXT NOT NULL,
+        coin        TEXT NOT NULL,
+        price       NUMERIC(18,8) NOT NULL,
+        recorded_at TIMESTAMP DEFAULT NOW()
+    )
+  `)
+    if err != nil {
+       log.Fatalf("Failed to create price_history table: %v", err)
+   }
 
 	GlobalStore = &Store{db: db}
-	log.Println("Database connected and users table ready")
+	log.Println("Database connected, users table and price_history table ready")
 }
 
 func (s *Store) Add(user domain.User) bool {
@@ -80,4 +92,38 @@ func (s *Store) UsernameExists(username string) bool {
 	var count int
 	s.db.QueryRow(`SELECT COUNT(*) FROM users WHERE LOWER(username) = LOWER($1)`, username).Scan(&count)
 	return count > 0
+}
+
+// SavePrice stores a real-time price snapshot into the database
+func (s *Store) SavePrice(exchange, coin string, price float64) {
+	s.db.Exec(
+		`INSERT INTO price_history (exchange, coin, price) VALUES ($1, $2, $3)`,
+		strings.ToLower(exchange), strings.ToUpper(coin), price,
+	)
+}
+
+// GetLatestPrices returns the most recent price for every exchange+coin pair
+func (s *Store) GetLatestPrices() map[string]map[string]float64 {
+	rows, err := s.db.Query(`
+		SELECT DISTINCT ON (exchange, coin) exchange, coin, price
+		FROM price_history
+		WHERE recorded_at >= NOW() - INTERVAL '7 days'
+		ORDER BY exchange, coin, recorded_at DESC
+	`)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	result := make(map[string]map[string]float64)
+	for rows.Next() {
+		var exchange, coin string
+		var price float64
+		rows.Scan(&exchange, &coin, &price)
+		if result[exchange] == nil {
+			result[exchange] = make(map[string]float64)
+		}
+		result[exchange][coin] = price
+	}
+	return result
 }

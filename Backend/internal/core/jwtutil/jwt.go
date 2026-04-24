@@ -6,12 +6,20 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 )
 
 // Secret used to sign tokens. In production, load this from an environment variable.
-var Secret = "coinstrove-secret-change-in-production"
+var Secret string
+
+func init() {
+	Secret = os.Getenv("JWT_SECRET")
+	if Secret == "" {
+		Secret = "coinstrove-secret-change-in-production"
+	}
+}
 
 type claims struct {
 	Username string `json:"username"`
