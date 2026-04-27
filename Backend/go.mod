@@ -5,7 +5,9 @@ go 1.23
 require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/imroc/req/v3 v3.46.0
+	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.12.0
+	github.com/sashabaranov/go-openai v1.41.2
 	github.com/streadway/amqp v1.1.0
 	golang.org/x/crypto v0.27.0
 )

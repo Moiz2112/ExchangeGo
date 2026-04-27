@@ -4,6 +4,8 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/userstore"  // ADD THIS
+    "strconv" 
 )
 
 type newHuobiService struct {
@@ -23,6 +25,12 @@ func NewHuobiService(priceRepo ports.PriceRepository, broadcaster ports.BroadCas
 
 func (huobi *newHuobiService) GetThePrice() {
 	huobi.data = huobi.priceRepo.Get(consts.HUOBI)
+	for _, currency := range huobi.data.Data.Currencies {
+        if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
+            userstore.GlobalStore.SavePrice(string(consts.HUOBI), currency.Name, price)
+        }
+    }
+
 	huobi.BroadCast()
 	huobi.WriteToQue()
 }

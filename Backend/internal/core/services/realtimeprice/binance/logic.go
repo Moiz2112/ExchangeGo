@@ -4,6 +4,8 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/userstore"  
+    "strconv"
 )
 
 type newBinanceService struct {
@@ -23,6 +25,11 @@ func NewBinanceService(priceRepo ports.PriceRepository, broadcaster ports.BroadC
 
 func (binance *newBinanceService) GetThePrice() {
 	binance.data = binance.priceRepo.Get(consts.BINANCE)
+	  for _, currency := range binance.data.Data.Currencies {
+        if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
+            userstore.GlobalStore.SavePrice(string(consts.BINANCE), currency.Name, price)
+        }
+    }
 	binance.BroadCast()
 	binance.WriteToQue()
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"coinstrove/api/auth"
+	"coinstrove/api/chatbot"
 	"coinstrove/api/websocket"
 	"coinstrove/internal/core/ports"
 	"coinstrove/internal/core/publisher"
@@ -18,8 +19,9 @@ import (
 	"coinstrove/repositories/apirepository"
 	"log"
 	"net/http"
-	"os"
 	"time"
+	"os"
+	"github.com/joho/godotenv"
 )
 
 func getPriceAfterFiveSeconds(priceService []ports.PriceService) {
@@ -35,6 +37,13 @@ func getPriceAfterFiveSeconds(priceService []ports.PriceService) {
 
 }
 
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func startServer() {
 	// Auth REST endpoints
 	http.HandleFunc("/register", auth.Register)
@@ -47,6 +56,14 @@ func startServer() {
 }
 
 func main() {
+	
+	
+	if err := godotenv.Load(".env"); err != nil {
+        if err := godotenv.Load("../. env"); err != nil {
+            log.Println("⚠️  Warning: Could not load .env file")
+        }
+    }
+
 	// Init database (creates users table if needed)
 	userstore.Init()
 
@@ -69,6 +86,23 @@ func main() {
 	}
 
 	websocket.NewRouter(handler)
+
+	// Initialize ChatBot with OpenAI API key
+	openaiKey := os.Getenv("OPENAI_API_KEY")
+	if openaiKey == "" {
+		log.Println("❌ ERROR: OPENAI_API_KEY is empty! ChatBot will not work.")
+		log.Println("   Make sure you have OPENAI_API_KEY=sk-... in your .env file")
+	} else {
+		// Show first and last few characters of key for debugging
+		keyPreview := openaiKey[:min(20, len(openaiKey))] + "..."
+		if len(openaiKey) > 20 {
+			keyPreview = openaiKey[:20] + "..." + openaiKey[len(openaiKey)-5:]
+		}
+		log.Printf("✅ OpenAI API Key loaded: %s (length: %d chars)", keyPreview, len(openaiKey))
+	}
+	chatbot.RegisterRoutes(openaiKey)
+	log.Println("✅ ChatBot routes registered")
+
 	go startServer()
 
 	priceService := []ports.PriceService{
