@@ -49,8 +49,8 @@ func startServer() {
 	http.HandleFunc("/register", auth.Register)
 	http.HandleFunc("/login", auth.Login)
 
-	log.Println("Starting Server on :8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	log.Println("Starting Server on :8081")
+	if err := http.ListenAndServe(":8081", nil); err != nil {
 		log.Fatalf("Error starting server: %v", err)
 	}
 }

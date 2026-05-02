@@ -6,9 +6,9 @@ import { mergeRates, Rates } from '../store/exchangeRatesSlice';
 import { RootState } from '../store';
 
 // ── Backend WebSocket URL ──────────────────────────────────────────────────
-// When your Go backend is running locally:  ws://localhost:8080/prices
+// When your Go backend is running locally:  ws://localhost:8081/prices
 // When deployed, replace with your server:  ws://your-server.com/prices
-const WS_URL = 'ws://localhost:8080/prices';
+const WS_URL = 'ws://localhost:8081/prices';
 
 // ── Coin display config ────────────────────────────────────────────────────
 // Backend sends: BTC, ETH, ADA, DOGE, DOT, LTC, BCH, XRP, SOL, LINK

@@ -30,6 +30,7 @@ func NewChatbotService(apiKey string) *ChatbotService {
 	config := openai.DefaultConfig(apiKey)
 	config.BaseURL = "https://api.groq.com/openai/v1"
 	client := openai.NewClientWithConfig(config)
+    fmt.Println("api key ", apiKey)
 
 	systemPrompt := `You are an AI assistant for ExchangeGO, a cryptocurrency exchange comparison platform.
 

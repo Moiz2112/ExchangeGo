@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { mergeRates, Rates } from '../store/exchangeRatesSlice';
 
-const WS_URL = 'ws://localhost:8080/prices';
+const WS_URL = 'ws://localhost:8081/prices';
 
 const COIN_META_KEYS = ['BTC','ETH','ADA','SOL','DOGE','XRP','DOT','LTC','BCH','LINK'];
 
