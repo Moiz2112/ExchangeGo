@@ -74,6 +74,15 @@ export default function Header() {
 
             <div className={styles.navDivider} />
 
+            <Link
+              to="/compare"
+              className={`${styles.navItem} ${isActive('/compare') ? styles.navActive : ''}`}
+            >
+              Compare
+            </Link>
+
+            <div className={styles.navDivider} />
+
             {/* Coins — dropdown */}
             <div className={styles.dropWrap} ref={dropRef}>
               <button

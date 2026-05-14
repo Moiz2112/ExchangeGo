@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Market from './pages/Market';
 import CoinDetail from './pages/CoinDetail';
 import About from './pages/About';
+import Compare from './pages/Compare';
 import store from './store';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
     children: [
       { path: '',             element: <Home /> },
       { path: 'market',       element: <Market /> },
+      { path: 'compare',      element: <Compare /> },
       { path: 'coins',        element: <Home /> },
       { path: 'coin/:coinId', element: <CoinDetail /> },
       { path: 'about',        element: <About /> },

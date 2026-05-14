@@ -1,0 +1,354 @@
+.page {
+  padding: 84px 32px 64px;
+  max-width: 1280px;
+  margin: 0 auto;
+  animation: fadeIn 0.35s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pageHeader,
+.panelHeader,
+.resultsHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pageHeader {
+  margin-bottom: 24px;
+}
+
+.pageTitle {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  letter-spacing: -0.03em;
+}
+
+.pageSub,
+.sectionSub {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.liveDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 5px rgba(63, 185, 80, 0.12);
+}
+
+.panel,
+.resultsSection {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+.panel {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.exchangeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: end;
+  margin: 24px 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.select {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 0 14px;
+  font-size: 0.94rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.versus {
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-border);
+  background: var(--accent-dim);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.coinRows {
+  display: grid;
+  gap: 14px;
+}
+
+.coinRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+}
+
+.addBtn,
+.removeBtn {
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addBtn {
+  margin-top: 18px;
+  min-height: 46px;
+  padding: 0 18px;
+}
+
+.removeBtn {
+  min-height: 48px;
+  padding: 0 16px;
+}
+
+.addBtn:hover,
+.removeBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.addBtn:disabled,
+.removeBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.resultCard {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.resultTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.coinBadge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.coinEmoji {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-dim);
+  font-size: 1.2rem;
+}
+
+.coinName {
+  color: var(--text-primary);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.coinTicker {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.statusTag {
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.statusSpread {
+  background: rgba(63, 185, 80, 0.12);
+  color: var(--green);
+}
+
+.statusMatched {
+  background: rgba(59, 130, 246, 0.14);
+  color: var(--accent);
+}
+
+.statusMissing {
+  background: rgba(246, 70, 93, 0.12);
+  color: var(--red);
+}
+
+.statusIncomplete {
+  background: rgba(255, 193, 7, 0.14);
+  color: #c99200;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric {
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metricLabel {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metricValue {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.messageBlock {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.messageLabel {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.messageText {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.emptyState {
+  margin-top: 24px;
+  border-radius: 14px;
+  border: 1px dashed var(--border-strong);
+  padding: 28px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 76px 16px 48px;
+  }
+
+  .panel,
+  .resultsSection {
+    padding: 18px;
+  }
+
+  .exchangeGrid,
+  .coinRow,
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .versus {
+    width: 48px;
+    justify-self: center;
+  }
+
+  .resultTop {
+    flex-direction: column;
+  }
+}
