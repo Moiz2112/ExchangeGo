@@ -59,7 +59,7 @@ const COIN_OPTIONS: CoinOption[] = [
   { id: 'chainlink', ticker: 'LINK', name: 'Chainlink', emoji: '⬡', color: '#2a5ada' },
 ];
 
-const COIN_META = Object.fromEntries(COIN_OPTIONS.map((coin) => [coin.ticker, coin])) as Record<string, CoinOption>;
+const COIN_BY_TICKER = Object.fromEntries(COIN_OPTIONS.map((coin) => [coin.ticker, coin])) as Record<string, CoinOption>;
 
 const INITIAL_ROWS: CompareRow[] = [{ id: 1, coin: 'BTC' }];
 
@@ -90,7 +90,7 @@ export default function Compare() {
   const results = useMemo<CompareResult[]>(
     () =>
       rows.map((row) => {
-        const meta = COIN_META[row.coin];
+        const meta = COIN_BY_TICKER[row.coin];
         const coinRates = rates[row.coin] ?? {};
 
         if (!row.coin || !exchangeOne || !exchangeTwo || exchangeOne === exchangeTwo) {
@@ -172,7 +172,10 @@ export default function Compare() {
   const canAddRow = rows.length < COIN_OPTIONS.length;
 
   const addRow = () => {
-    setRows((currentRows) => [...currentRows, { id: currentRows[currentRows.length - 1].id + 1, coin: '' }]);
+    setRows((currentRows) => [
+      ...currentRows,
+      { id: Math.max(0, ...currentRows.map((row) => row.id)) + 1, coin: '' },
+    ]);
   };
 
   const updateRow = (rowId: number, coin: string) => {
