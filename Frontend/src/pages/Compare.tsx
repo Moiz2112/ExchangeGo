@@ -32,6 +32,20 @@ interface CompareResult {
   cheaperExchange: string | null;
 }
 
+const STATUS_LABELS: Record<CompareStatus, string> = {
+  spread: 'Cheaper exchange found',
+  matched: 'Prices aligned',
+  missing: 'Missing feed',
+  incomplete: 'Awaiting input',
+};
+
+const STATUS_CLASSES: Record<CompareStatus, string> = {
+  spread: 'statusSpread',
+  matched: 'statusMatched',
+  missing: 'statusMissing',
+  incomplete: 'statusIncomplete',
+};
+
 const COIN_OPTIONS: CoinOption[] = [
   { id: 'bitcoin', ticker: 'BTC', name: 'Bitcoin', emoji: '₿', color: '#f7931a' },
   { id: 'ethereum', ticker: 'ETH', name: 'Ethereum', emoji: 'Ξ', color: '#627eea' },
@@ -278,20 +292,14 @@ export default function Compare() {
               <article key={result.rowId} className={styles.resultCard}>
                 <div className={styles.resultTop}>
                   <div className={styles.coinBadge} style={{ color: result.meta?.color ?? 'var(--accent)' }}>
-                    <span className={styles.coinEmoji}>{result.meta?.emoji ?? '◎'}</span>
+                    <span className={styles.coinEmoji}>{result.meta?.emoji ?? '●'}</span>
                     <div>
                       <div className={styles.coinName}>{result.meta?.name ?? result.coin}</div>
                       <div className={styles.coinTicker}>{result.meta?.ticker ?? result.coin}</div>
                     </div>
                   </div>
-                  <span className={`${styles.statusTag} ${styles[`status${result.status[0].toUpperCase()}${result.status.slice(1)}`]}`}>
-                    {result.status === 'spread'
-                      ? `Cheaper on ${result.cheaperExchange}`
-                      : result.status === 'matched'
-                        ? 'Prices aligned'
-                        : result.status === 'missing'
-                          ? 'Missing feed'
-                          : 'Awaiting input'}
+                  <span className={`${styles.statusTag} ${styles[STATUS_CLASSES[result.status]]}`}>
+                    {result.status === 'spread' ? `Cheaper on ${result.cheaperExchange}` : STATUS_LABELS[result.status]}
                   </span>
                 </div>
 
