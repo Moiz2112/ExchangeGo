@@ -172,10 +172,10 @@ export default function Compare() {
   const canAddRow = rows.length < COIN_OPTIONS.length;
 
   const addRow = () => {
-    setRows((currentRows) => [
-      ...currentRows,
-      { id: Math.max(0, ...currentRows.map((row) => row.id)) + 1, coin: '' },
-    ]);
+    setRows((currentRows) => {
+      const nextRowId = currentRows.length > 0 ? Math.max(...currentRows.map((row) => row.id)) + 1 : 1;
+      return [...currentRows, { id: nextRowId, coin: '' }];
+    });
   };
 
   const updateRow = (rowId: number, coin: string) => {
@@ -183,7 +183,13 @@ export default function Compare() {
   };
 
   const removeRow = (rowId: number) => {
-    setRows((currentRows) => (currentRows.length === 1 ? currentRows : currentRows.filter((row) => row.id !== rowId)));
+    setRows((currentRows) => {
+      if (currentRows.length <= 1) {
+        return currentRows;
+      }
+
+      return currentRows.filter((row) => row.id !== rowId);
+    });
   };
 
   return (
