@@ -46,6 +46,9 @@ export default function Header() {
     path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
 
   const openLogin = (view: 'signin' | 'signup') => { setLoginView(view); setShowLogin(true); };
+  const openChatbot = () => {
+    window.dispatchEvent(new Event('exchangego:open-chatbot'));
+  };
 
   return (
     <>
@@ -70,6 +73,15 @@ export default function Header() {
               className={`${styles.navItem} ${isActive('/market') ? styles.navActive : ''}`}
             >
               Market
+            </Link>
+
+            <div className={styles.navDivider} />
+
+            <Link
+              to="/compare"
+              className={`${styles.navItem} ${isActive('/compare') ? styles.navActive : ''}`}
+            >
+              Compare
             </Link>
 
             <div className={styles.navDivider} />
@@ -113,6 +125,16 @@ export default function Header() {
             >
               About Us
             </Link>
+
+            <div className={styles.navDivider} />
+
+            <button
+              type="button"
+              className={`${styles.navItem} ${styles.navBtn}`}
+              onClick={openChatbot}
+            >
+              Chatbot
+            </button>
           </nav>
 
           {/* Right */}

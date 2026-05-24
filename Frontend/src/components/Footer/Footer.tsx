@@ -1,130 +1,134 @@
-import styles from "./Footer.module.css";
-import { Link } from "react-router-dom";
-import logo from "../../assets/exchangego.png";
-
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
+  FaBitcoin,
+  FaChartLine,
+  FaCommentDots,
+  FaEnvelope,
   FaGithub,
   FaInstagram,
-  FaFacebook,
   FaLinkedin,
   FaTwitter,
-  FaEnvelope,
-  FaBriefcase
-} from "react-icons/fa";
+} from 'react-icons/fa';
+import logo from '../../assets/fav.png';
+import styles from './Footer.module.css';
 
-import { useState } from "react";
+const COINS = [
+  { id: 'bitcoin', label: 'Bitcoin' },
+  { id: 'ethereum', label: 'Ethereum' },
+  { id: 'cardano', label: 'Cardano' },
+  { id: 'solana', label: 'Solana' },
+  { id: 'dogecoin', label: 'Dogecoin' },
+  { id: 'ripple', label: 'XRP' },
+  { id: 'polkadot', label: 'Polkadot' },
+  { id: 'litecoin', label: 'Litecoin' },
+  { id: 'bitcoin-cash', label: 'Bitcoin Cash' },
+  { id: 'chainlink', label: 'Chainlink' },
+];
 
 function Footer() {
-  //const [showCoins, setShowCoins] = useState(false);
-  const [productCoins, setProductCoins] = useState(false);
-  const [pagesCoins, setPagesCoins] = useState(false);
+  const [coinsOpen, setCoinsOpen] = useState(false);
 
+  const openChatbot = () => {
+    window.dispatchEvent(new Event('exchangego:open-chatbot'));
+  };
 
   return (
     <footer className={styles.footer}>
-      <div className="container">
-        <div className="row">
+      <div className={styles.inner}>
+        <div className={styles.top}>
+          <div className={styles.brandCol}>
+            <Link to="/" className={styles.brand}>
+              <img src={logo} alt="ExchangeGO" className={styles.brandLogo} />
+              <span className={styles.brandText}>ExchangeGo</span>
+            </Link>
+            <p className={styles.description}>
+              ExchangeGo brings live crypto prices, exchange comparisons, and fast market insights together in one place.
+            </p>
 
-          {/* PRODUCT */}
-          <div className="col-md-2 ">
-            <h5 className={styles.heading}>Product</h5>
+            <div className={styles.socialRow}>
+              <a href="https://github.com/Moiz2112" target="_blank" rel="noreferrer" className={styles.socialBtn} aria-label="GitHub">
+                <FaGithub />
+              </a>
+              <a href="https://x.com/MoizRehman50720" target="_blank" rel="noreferrer" className={styles.socialBtn} aria-label="Twitter">
+                <FaTwitter />
+              </a>
+              <a href="https://www.linkedin.com/in/moiz-ur-rehman-53b69a280/" target="_blank" rel="noreferrer" className={styles.socialBtn} aria-label="LinkedIn">
+                <FaLinkedin />
+              </a>
+              <a href="https://www.instagram.com/_moiz_ur_rehman_/" target="_blank" rel="noreferrer" className={styles.socialBtn} aria-label="Instagram">
+                <FaInstagram />
+              </a>
+            </div>
+          </div>
 
-            <ul className={styles.list}>
-              <li><Link to="/" target="_blank">Dashboard</Link></li>
-              <li><Link to="/market" target="_blank">Market</Link></li>
+          <div className={styles.linksCol}>
+            <h5 className={styles.heading}>Quick Links</h5>
+            <ul className={styles.linkList}>
+              <li><Link to="/market">Market</Link></li>
+              <li><Link to="/about">About Us</Link></li>
+              <li><button type="button" className={styles.linkButton} onClick={openChatbot}>Chatbot</button></li>
+              <li><Link to="/" onClick={() => setCoinsOpen(false)}>Dashboard</Link></li>
+            </ul>
+          </div>
 
-              {/* Dropdown */}
+          <div className={styles.linksCol}>
+            <h5 className={styles.heading}>Explore</h5>
+            <ul className={styles.linkList}>
+              <li><button type="button" className={styles.linkButton} onClick={openChatbot}><FaCommentDots /> Open Chatbot</button></li>
+              <li><Link to="/market"><FaChartLine /> Live Market</Link></li>
+              <li><Link to="/compare">Compare Exchanges</Link></li>
               <li>
-               <span 
-                className={styles.dropdownToggle}
-                onClick={() => setProductCoins(!productCoins)}
-                 >
-                  Coins ▾
-                </span>
-
-                {productCoins  && (
+                <button type="button" className={styles.dropdownToggle} onClick={() => setCoinsOpen(o => !o)}>
+                  Coins <span className={styles.chevron}>{coinsOpen ? '▴' : '▾'}</span>
+                </button>
+                {coinsOpen && (
                   <ul className={styles.dropdown}>
-                    <li><Link to="/coin/bitcoin">Bitcoin</Link></li>
-                    <li><Link to="/coin/ethereum">Ethereum</Link></li>
-                    <li><Link to="/coin/cardano">Cardano</Link></li>
-                    <li><Link to="/coin/solana">Solana</Link></li>
-                    <li><Link to="/coin/dogecoin">Dogecoin</Link></li>
-                    <li><Link to="/coin/ripple">XRP</Link></li>
-                    <li><Link to="/coin/polkadot">Polkadot</Link></li>
-                    <li><Link to="/coin/litecoin">Litecoin</Link></li>
-                    <li><Link to="/coin/bitcoin-cash">Bitcoin Cash</Link></li>
-                    <li><Link to="/coin/chainlink">Chainlink</Link></li>
+                    {COINS.map(coin => (
+                      <li key={coin.id}><Link to={`/coin/${coin.id}`}>{coin.label}</Link></li>
+                    ))}
                   </ul>
                 )}
               </li>
+            
             </ul>
           </div>
 
-          {/* SOCIAL MEDIA */}
-          <div className="col-md-3 mb-4">
-            <h5 className={styles.heading}>Social Media</h5>
-
-          <ul className={styles.socialGrid}>
-            <li><a href="mailto:murrehman212@gmail.com" target="_blank" className={styles.socialItem}>
-         <FaEnvelope /> Mail</a></li> 
-            <li> <a href="https://web.facebook.com/moiz.urrahman.351" target="_blank" className={styles.socialItem}>
-         <FaFacebook /> Facebook</a></li> 
-            <li> <a href="https://x.com/MoizRehman50720" target="_blank" className={styles.socialItem}>
-         <FaTwitter /> Twitter</a></li> 
-            <li> <a href="https://www.instagram.com/_moiz_ur_rehman_/?hl=en"  target="_blank" className={styles.socialItem}>
-         <FaInstagram /> Instagram</a></li> 
-            <li> <a href="https://www.linkedin.com/in/moiz-ur-rehman-53b69a280/" target="_blank" className={styles.socialItem}>
-         <FaLinkedin /> LinkedIn</a></li> 
-            <li> <a href="https://www.upwork.com/freelancers/~014210f22d94e3b9a0" target="_blank" className={styles.socialItem}><FaBriefcase />Upwork</a></li> 
-            <li><a href="https://github.com/Moiz2112" target="_blank" className={styles.socialItem}>
-         <FaGithub /> Github</a></li>
-            </ul>
+          <div className={styles.contactCol}>
+            <h5 className={styles.heading}>Contact Us</h5>
+            <div className={styles.contactList}>
+              <div className={styles.contactItem}>
+                <span className={styles.contactIcon}><FaCommentDots /></span>
+                <div>
+                  <p>Chat support</p>
+                  <button type="button" className={styles.contactAction} onClick={openChatbot}>Open assistant</button>
+                </div>
+              </div>
+              <div className={styles.contactItem}>
+                <span className={styles.contactIcon}><FaEnvelope /></span>
+                <div>
+                  <p>Support</p>
+                  <a href="mailto:support@exchangego.com">support@exchangego.com</a>
+                </div>
+              </div>
+              <div className={styles.contactItem}>
+                <span className={styles.contactIcon}><FaBitcoin /></span>
+                <div>
+                  <p>Markets</p>
+                  <Link to="/market">View live prices</Link>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
 
-          {/* PAGES */}
-          <div className="col-md-3 mb-5">
-            <h5 className={styles.heading}>Pages</h5>
-
-            <ul className={styles.list}>
-              <li><Link to="/" target="_blank">Dashboard</Link></li>
-              <li><Link to="/market" target="_blank">Market</Link></li>
-              <li>  {/* Dropdown */}
-              <li>
-              <span 
-              className={styles.dropdownToggle1}
-              onClick={() => setPagesCoins(!pagesCoins)}
-              >
-                  Coins ▾
-                </span>
-
-                {pagesCoins  && (
-                   <ul className={styles.dropdown}>
-                    <li><Link to="/coin/bitcoin">Bitcoin</Link></li>
-                    <li><Link to="/coin/ethereum">Ethereum</Link></li>
-                    <li><Link to="/coin/cardano">Cardano</Link></li>
-                    <li><Link to="/coin/solana">Solana</Link></li>
-                    <li><Link to="/coin/dogecoin">Dogecoin</Link></li>
-                    <li><Link to="/coin/ripple">XRP</Link></li>
-                    <li><Link to="/coin/polkadot">Polkadot</Link></li>
-                    <li><Link to="/coin/litecoin">Litecoin</Link></li>
-                    <li><Link to="/coin/bitcoin-cash">Bitcoin Cash</Link></li>
-                    <li><Link to="/coin/chainlink">Chainlink</Link></li>
-                  </ul>
-                )}
-              </li></li>
-            </ul>
+        <div className={styles.bottom}>
+          <p>© {new Date().getFullYear()} ExchangeGo. All rights reserved.</p>
+          <div className={styles.bottomLinks}>
+            <Link to="/about">About Us</Link>
+            <Link to="/market">Market</Link>
+            <Link to="/">Dashboard</Link>
           </div>
-
-          {/* LOGO RIGHT */}
-          <div className="col-md-3 text-md-end text-center">
-            <img src={logo} alt="ExchangeGO" className={styles.logo} />
-          </div>
-      {/* Copyright */}
-       <div className="text-right ">
-       <p className={styles.footerCopyright}>
-         © {new Date().getFullYear()} ExchangeGO. All Rights Reserved.
-       </p>
-       </div>
         </div>
       </div>
     </footer>

@@ -22,7 +22,7 @@ const formatMessage = (text: string) => {
   return (
     <ul className={styles.bulletList}>
       {lines.map((line, i) => {
-        const clean = line.replace(/^[\*\-\d\.]+\s*/, '').trim();
+        const clean = line.replace(/^[*\d.-]+\s*/, '').trim();
         return clean ? <li key={i}>{clean}</li> : null;
       })}
     </ul>
@@ -41,6 +41,12 @@ export const ChatBot: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    const openChatbot = () => setIsOpen(true);
+    window.addEventListener('exchangego:open-chatbot', openChatbot);
+    return () => window.removeEventListener('exchangego:open-chatbot', openChatbot);
+  }, []);
 
   // Close on outside click
   useEffect(() => {

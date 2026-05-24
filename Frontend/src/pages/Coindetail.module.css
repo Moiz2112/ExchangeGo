@@ -514,24 +514,24 @@
   max-width: 300px;
 }
 .authSignInBtn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #FFC107, #e0a800);
   border: none;
   border-radius: 10px;
-  color: #fff;
+  color: #000;
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
   padding: 13px 28px;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+  box-shadow: 0 4px 15px rgba(240,185,11,0.3);
   width: 100%;
   margin-top: 4px;
 }
 .authSignInBtn:hover {
   opacity: 0.9;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(59,130,246,0.4);
+  box-shadow: 0 8px 24px rgba(240,185,11,0.4);
 }
 .authBackBtn {
   background: none;
