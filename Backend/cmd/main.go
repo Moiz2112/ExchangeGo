@@ -1,40 +1,88 @@
 package main
 
 import (
+	"coinstrove/api/admin"
 	"coinstrove/api/auth"
 	"coinstrove/api/chatbot"
 	"coinstrove/api/websocket"
 	"coinstrove/internal/core/ports"
 	"coinstrove/internal/core/publisher"
-	"coinstrove/internal/core/services/realtimeprice/binance"
-	"coinstrove/internal/core/services/realtimeprice/bitfinex"
-	"coinstrove/internal/core/services/realtimeprice/bitstamp"
-	"coinstrove/internal/core/services/realtimeprice/coinbase"
-	gate_io "coinstrove/internal/core/services/realtimeprice/gate.io"
-	"coinstrove/internal/core/services/realtimeprice/huobi"
-	"coinstrove/internal/core/services/realtimeprice/kraken"
-	"coinstrove/internal/core/services/realtimeprice/kucoin"
-	"coinstrove/internal/core/services/realtimeprice/okx"
+	"coinstrove/internal/core/registry"
 	"coinstrove/internal/core/userstore"
-	"coinstrove/repositories/apirepository"
+	"coinstrove/internal/services/dynamicfetcher"
 	"log"
 	"net/http"
-	"time"
 	"os"
+	"sync"
+	"time"
+
 	"github.com/joho/godotenv"
 )
 
-func getPriceAfterFiveSeconds(priceService []ports.PriceService) {
+// ─── Hot-reloadable price service manager ────────────────────────────────────
 
+type serviceManager struct {
+	mu        sync.RWMutex
+	services  []ports.PriceService
+	broadcast ports.BroadCastHandler
+	pub       ports.Publisher
+}
+
+func newServiceManager(broadcast ports.BroadCastHandler, pub ports.Publisher) *serviceManager {
+	sm := &serviceManager{broadcast: broadcast, pub: pub}
+	sm.reload()
+	return sm
+}
+
+// reload rebuilds the service list from the current registry state.
+// Called at startup and after every admin exchange/coin change.
+func (sm *serviceManager) reload() {
+	services := dynamicfetcher.BuildServicesFromRegistry(sm.broadcast, sm.pub)
+	sm.mu.Lock()
+	sm.services = services
+	sm.mu.Unlock()
+	log.Printf("ServiceManager: reloaded %d services", len(services))
+}
+
+// run fetches prices from all active services, called on every ticker tick.
+func (sm *serviceManager) run() {
+	sm.mu.RLock()
+	svcs := make([]ports.PriceService, len(sm.services))
+	copy(svcs, sm.services)
+	sm.mu.RUnlock()
+
+	for _, svc := range svcs {
+		go svc.GetThePrice()
+	}
+}
+
+// ─── Price ticker loop ────────────────────────────────────────────────────────
+
+func startPriceTicker(sm *serviceManager) {
 	ticker := time.NewTicker(7 * time.Second)
 	for range ticker.C {
-		log.Printf("Starting To Fetch Latest Price")
-		for _, value := range priceService {
-			go value.GetThePrice()
-		}
-		log.Printf("Fetch Price competed")
+		log.Printf("Fetching prices from %d active services", len(sm.services))
+		sm.run()
 	}
+}
 
+// ─── Registry refresh hook (called by admin handler after changes) ────────────
+
+// GlobalServiceManager is used by the admin handler to trigger hot-reload.
+var GlobalServiceManager *serviceManager
+
+// ─── HTTP server ──────────────────────────────────────────────────────────────
+
+func startServer() {
+	http.HandleFunc("/register", auth.Register)
+	http.HandleFunc("/login", auth.Login)
+	http.HandleFunc("/reset-password", auth.ResetPassword)
+	admin.RegisterRoutes()
+
+	log.Println("Server listening on :8081")
+	if err := http.ListenAndServe(":8081", nil); err != nil {
+		log.Fatalf("Server error: %v", err)
+	}
 }
 
 func min(a, b int) int {
@@ -44,82 +92,68 @@ func min(a, b int) int {
 	return b
 }
 
-func startServer() {
-	// Auth REST endpoints
-	http.HandleFunc("/register", auth.Register)
-	http.HandleFunc("/login", auth.Login)
-
-	log.Println("Starting Server on :8081")
-	if err := http.ListenAndServe(":8081", nil); err != nil {
-		log.Fatalf("Error starting server: %v", err)
-	}
-}
+// ─── Main ─────────────────────────────────────────────────────────────────────
 
 func main() {
-	
-	
 	if err := godotenv.Load(".env"); err != nil {
-        if err := godotenv.Load("../. env"); err != nil {
-            log.Println("⚠️  Warning: Could not load .env file")
-        }
-    }
+		if err := godotenv.Load("../.env"); err != nil {
+			log.Println("Warning: .env not found")
+		}
+	}
 
-	// Init database (creates users table if needed)
+	// Init DB + admin tables
 	userstore.Init()
+	userstore.GlobalStore.InitAdminTables()
 
-	apiRepo := apirepository.NewAPIRepository()
+	// Load enabled state into registry
+	registry.Global.Refresh()
+
+	// WebSocket handler
 	handler := websocket.NewHandler()
 	broadCastManager := websocket.NewBroadcastManager(handler)
+	websocket.NewRouter(handler)
 
+	// RabbitMQ (optional)
 	rabbitURL := os.Getenv("RABBITMQ_URL")
 	if rabbitURL == "" {
 		rabbitURL = "amqp://guest:guest@localhost:5672/"
 	}
 	quePublisher, err := publisher.NewRabbitMQPublisher(rabbitURL)
 	if err != nil {
-		log.Printf("Error while Initiating Rabbit MQ Connection with message %v", err)
-		log.Printf("Continuing without RabbitMQ publisher for now...")
+		log.Printf("RabbitMQ unavailable: %v — continuing without it", err)
 	}
 	if quePublisher != nil {
 		quePublisher.Init()
 		defer quePublisher.Close()
 	}
 
-	websocket.NewRouter(handler)
-
-	// Initialize ChatBot with OpenAI API key
+	// ChatBot
 	openaiKey := os.Getenv("OPENAI_API_KEY")
 	if openaiKey == "" {
-		log.Println("❌ ERROR: OPENAI_API_KEY is empty! ChatBot will not work.")
-		log.Println("   Make sure you have OPENAI_API_KEY=sk-... in your .env file")
+		log.Println("WARNING: OPENAI_API_KEY not set — chatbot disabled")
 	} else {
-		// Show first and last few characters of key for debugging
-		keyPreview := openaiKey[:min(20, len(openaiKey))] + "..."
-		if len(openaiKey) > 20 {
-			keyPreview = openaiKey[:20] + "..." + openaiKey[len(openaiKey)-5:]
-		}
-		log.Printf("✅ OpenAI API Key loaded: %s (length: %d chars)", keyPreview, len(openaiKey))
+		log.Printf("OpenAI key loaded (%d chars)", len(openaiKey))
 	}
 	chatbot.RegisterRoutes(openaiKey)
-	log.Println("✅ ChatBot routes registered")
 
+	// Build dynamic service manager (reads from registry)
+	GlobalServiceManager = newServiceManager(broadCastManager, quePublisher)
+
+	// Inject hot-reload hook into admin handler
+	// The admin handler calls registry.Global.Refresh() then this hook
+	admin.SetReloadHook(func() {
+		registry.Global.Refresh()
+		GlobalServiceManager.reload()
+	})
+
+	log.Println("Admin routes registered at /admin/*")
+	log.Println("Dynamic price fetcher ready")
+
+	// Start HTTP server in background
 	go startServer()
 
-	priceService := []ports.PriceService{
-		binance.NewBinanceService(apiRepo, broadCastManager, quePublisher),
-		gate_io.NewGateIOService(apiRepo, broadCastManager, quePublisher),
-		kraken.NewKrakenService(apiRepo, broadCastManager, quePublisher),
-		coinbase.NewCoinBaseService(apiRepo, broadCastManager, quePublisher),
-		//bitpay.NewBitPayService(apiRepo, broadCastManager, quePublisher),
-		bitfinex.NewBitfinexService(apiRepo, broadCastManager, quePublisher),
-		bitstamp.NewBitstampService(apiRepo, broadCastManager, quePublisher),
-		huobi.NewHuobiService(apiRepo, broadCastManager, quePublisher),
-		kucoin.NewKucoinService(apiRepo, broadCastManager, quePublisher),
-		okx.NewOkxService(apiRepo, broadCastManager, quePublisher),
-	}
-
-	// WebSocket Endpoints
-	go getPriceAfterFiveSeconds(priceService)
+	// Start price ticker
+	go startPriceTicker(GlobalServiceManager)
 
 	select {}
 }
