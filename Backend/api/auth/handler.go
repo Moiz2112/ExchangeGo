@@ -155,3 +155,80 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Email:    user.Email,
 	})
 }
+
+// ResetPassword handles POST /reset-password
+// Requires Authorization header with valid token
+// Body: { "current_password": "...", "new_password": "..." }
+func ResetPassword(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		HandleCORS(w, r)
+		return
+	}
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, domain.AuthError{Message: "Method not allowed"})
+		return
+	}
+
+	// Extract and validate token from Authorization header
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		writeJSON(w, http.StatusUnauthorized, domain.AuthError{Message: "Missing or invalid token"})
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+	username, _, err := jwtutil.Validate(token)
+	if err != nil {
+		writeJSON(w, http.StatusUnauthorized, domain.AuthError{Message: "Invalid or expired token"})
+		return
+	}
+
+	// Parse request body
+	var req struct {
+		CurrentPassword string `json:"current_password"`
+		NewPassword     string `json:"new_password"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, domain.AuthError{Message: "Invalid request body"})
+		return
+	}
+
+	req.CurrentPassword = strings.TrimSpace(req.CurrentPassword)
+	req.NewPassword = strings.TrimSpace(req.NewPassword)
+
+	if req.CurrentPassword == "" || req.NewPassword == "" {
+		writeJSON(w, http.StatusBadRequest, domain.AuthError{Message: "Current and new passwords are required"})
+		return
+	}
+
+	if len(req.NewPassword) < 6 {
+		writeJSON(w, http.StatusBadRequest, domain.AuthError{Message: "New password must be at least 6 characters"})
+		return
+	}
+
+	// Find user by username
+	user := userstore.GlobalStore.FindByUsernameOrEmail(username)
+	if user == nil {
+		writeJSON(w, http.StatusNotFound, domain.AuthError{Message: "User not found"})
+		return
+	}
+
+	// Verify current password
+	if err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(req.CurrentPassword)); err != nil {
+		writeJSON(w, http.StatusUnauthorized, domain.AuthError{Message: "Current password is incorrect"})
+		return
+	}
+
+	// Hash new password
+	newHashed, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, domain.AuthError{Message: "Failed to process new password"})
+		return
+	}
+
+	// Update password in store
+	user.HashedPassword = string(newHashed)
+	userstore.GlobalStore.UpdateUser(*user)
+
+	writeJSON(w, http.StatusOK, map[string]string{"message": "Password updated successfully"})
+}

@@ -4,8 +4,9 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
-	"coinstrove/internal/core/userstore"  
-    "strconv" 
+	"coinstrove/internal/core/registry"
+	"coinstrove/internal/core/userstore"
+	"strconv"
 )
 
 type newCoinBaseService struct {
@@ -24,12 +25,15 @@ func NewCoinBaseService(priceRepo ports.PriceRepository, broadcaster ports.Broad
 }
 
 func (coinbase *newCoinBaseService) GetThePrice() {
+	if !registry.Global.IsExchangeEnabled("coinbase") {
+		return
+	}
 	coinbase.data = coinbase.priceRepo.Get(consts.COINBASE)
 	for _, currency := range coinbase.data.Data.Currencies {
-        if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
-            userstore.GlobalStore.SavePrice(string(consts.COINBASE), currency.Name, price)
-        }
-    }
+		if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
+			userstore.GlobalStore.SavePrice(string(consts.COINBASE), currency.Name, price)
+		}
+	}
 	coinbase.BroadCast()
 	coinbase.WriteToQue()
 }

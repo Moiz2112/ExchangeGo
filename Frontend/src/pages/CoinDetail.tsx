@@ -5,6 +5,7 @@ import axios from 'axios';
 import { RootState } from '../store';
 import { useAuth } from '../context/AuthContext';
 import LoginModal from '../components/LoginModal/LoginModal';
+import { toggleFavorite } from '../utils/favorites';
 import styles from './CoinDetail.module.css';
 
 // Maps URL coinId → ticker symbol stored in Redux
@@ -72,6 +73,11 @@ const CoinDetail = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [loadingText, setLoadingText] = useState('Connecting to markets…');
   const [coinInfo, setCoinInfo] = useState<any>(null);
+  const [favExchanges, setFavExchanges] = useState(new Set(
+    JSON.parse(localStorage.getItem('exchangego_favorites') || '[]')
+      .filter((f: any) => f.type === 'exchange')
+      .map((f: any) => f.name)
+  ));
 
   // Page loader — 2 second animated sequence before showing content
   useEffect(() => {
@@ -420,6 +426,24 @@ const CoinDetail = () => {
                         {diff >= 0 ? '+' : ''}{diff.toFixed(3)}% vs avg
                       </span>
                     </div>
+
+                    {/* Heart favorite button */}
+                    <button
+                      className={styles.exchangeHeartBtn}
+                      onClick={() => {
+                        const isFav = toggleFavorite('exchange', exchange);
+                        if (isFav) {
+                          setFavExchanges(new Set([...favExchanges, exchange]));
+                        } else {
+                          const newFav = new Set(favExchanges);
+                          newFav.delete(exchange);
+                          setFavExchanges(newFav);
+                        }
+                      }}
+                      title={favExchanges.has(exchange) ? 'Remove from favorites' : 'Add to favorites'}
+                    >
+                      {favExchanges.has(exchange) ? '❤️' : '🤍'}
+                    </button>
                   </div>
                 );
               })}

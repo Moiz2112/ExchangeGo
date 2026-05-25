@@ -67,6 +67,7 @@ function Footer() {
             <ul className={styles.linkList}>
               <li><Link to="/market">Market</Link></li>
               <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/contact">Contact Us</Link></li>
               <li><button type="button" className={styles.linkButton} onClick={openChatbot}>Chatbot</button></li>
               <li><Link to="/" onClick={() => setCoinsOpen(false)}>Dashboard</Link></li>
             </ul>
@@ -108,7 +109,7 @@ function Footer() {
                 <span className={styles.contactIcon}><FaEnvelope /></span>
                 <div>
                   <p>Support</p>
-                  <a href="mailto:support@exchangego.com">support@exchangego.com</a>
+                  <Link to="/contact">Submit a ticket</Link>
                 </div>
               </div>
               <div className={styles.contactItem}>

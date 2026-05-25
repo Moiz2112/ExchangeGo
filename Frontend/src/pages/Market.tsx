@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store';
+import { useConfig } from '../hooks/useConfig.ts';
 import styles from './Market.module.css';
 
-const COIN_META: Record<string, { emoji: string; name: string; color: string; bg: string; id: string }> = {
+const COIN_META_FALLBACK: Record<string, { emoji: string; name: string; color: string; bg: string; id: string }> = {
   BTC:  { emoji: '₿', name: 'Bitcoin',     color: '#f7931a', bg: 'rgba(247,147,26,0.12)',  id: 'bitcoin' },
   ETH:  { emoji: 'Ξ', name: 'Ethereum',    color: '#627eea', bg: 'rgba(98,126,234,0.12)',  id: 'ethereum' },
   ADA:  { emoji: '₳', name: 'Cardano',     color: '#3cc8c8', bg: 'rgba(60,200,200,0.12)',  id: 'cardano' },
@@ -36,9 +37,27 @@ const downloadCSV = (rates: RootState['exchangeRates']) => {
 };
 
 export default function Market() {
-  const rates = useSelector((s: RootState) => s.exchangeRates);
+  const rates    = useSelector((s: RootState) => s.exchangeRates);
   const navigate = useNavigate();
-  const loading = Object.keys(rates).length === 0;
+  const config   = useConfig();
+  const loading  = Object.keys(rates).length === 0;
+
+  const enabledSet = new Set(config.enabled_coins.map(t => t.toUpperCase()));
+
+  const coinMeta = (ticker: string) => {
+    const fromDB  = config.coins_meta.find(c => c.ticker === ticker);
+    const fallback = COIN_META_FALLBACK[ticker];
+    if (fromDB) return { ...fallback, emoji: fromDB.emoji || fallback?.emoji || ticker[0], name: fromDB.name || fallback?.name || ticker, color: fromDB.color || fallback?.color || '#fff' };
+    return fallback;
+  };
+
+  const orderedEntries = Object.entries(rates)
+    .filter(([ticker]) => enabledSet.has(ticker.toUpperCase()))
+    .sort(([a], [b]) => {
+      const aO = config.coins_meta.find(c => c.ticker === a)?.display_order ?? 999;
+      const bO = config.coins_meta.find(c => c.ticker === b)?.display_order ?? 999;
+      return aO - bO;
+    });
 
   return (
     <div className={styles.page}>
@@ -70,8 +89,8 @@ export default function Market() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(rates).map(([ticker, exchanges], i) => {
-                const meta = COIN_META[ticker];
+              {orderedEntries.map(([ticker, exchanges], i) => {
+                const meta = coinMeta(ticker);
                 if (!meta) return null;
                 const allP = Object.values(exchanges).map(e => Number(e.price));
                 const maxR = Math.max(...allP);

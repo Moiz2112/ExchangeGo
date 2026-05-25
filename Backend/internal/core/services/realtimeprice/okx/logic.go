@@ -4,8 +4,9 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
-	"coinstrove/internal/core/userstore"  
-    "strconv"
+	"coinstrove/internal/core/registry"
+	"coinstrove/internal/core/userstore"
+	"strconv"
 )
 
 type newOkxService struct {
@@ -24,12 +25,15 @@ func NewOkxService(priceRepo ports.PriceRepository, broadcaster ports.BroadCastH
 }
 
 func (okx *newOkxService) GetThePrice() {
+	if !registry.Global.IsExchangeEnabled("okx") {
+		return
+	}
 	okx.data = okx.priceRepo.Get(consts.OKX)
-	 for _, currency := range okx.data.Data.Currencies {
-        if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
-            userstore.GlobalStore.SavePrice(string(consts.OKX), currency.Name, price)
-        }
-    }
+	for _, currency := range okx.data.Data.Currencies {
+		if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
+			userstore.GlobalStore.SavePrice(string(consts.OKX), currency.Name, price)
+		}
+	}
 	okx.BroadCast()
 	okx.WriteToQue()
 }

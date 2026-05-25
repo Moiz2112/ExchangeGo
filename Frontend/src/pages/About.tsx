@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styles from './About.module.css';
 
 const FEATURES = [
@@ -191,6 +191,76 @@ const About = () => {
               </ul>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Contact Us ── */}
+      <section className={styles.contactSection} ref={el => addRef(el as HTMLDivElement, 24)}>
+        <div className={styles.contactBg} />
+
+        <div className={styles.contactInner}>
+          {/* Left — heading */}
+          <div className={styles.contactLeft}>
+            <span className={styles.contactBadge}>✉️ Support</span>
+            <h2 className={styles.contactTitle}>
+              Need help or have<br />
+              <span className={styles.contactAccent}>feedback?</span>
+            </h2>
+            <p className={styles.contactDesc}>
+              Our team reviews every message. Use the chatbot for instant answers,
+              or submit a detailed ticket and we'll get back to you within 24 hours.
+            </p>
+
+            <div className={styles.contactActions}>
+              <button
+                className={styles.contactChatBtn}
+                onClick={() => window.dispatchEvent(new Event('exchangego:open-chatbot'))}
+              >
+                <span className={styles.contactBtnIcon}>💬</span>
+                Open Chatbot
+              </button>
+              <Link to="/contact" className={styles.contactTicketBtn}>
+                <span className={styles.contactBtnIcon}>🎫</span>
+                Submit a Ticket
+              </Link>
+            </div>
+          </div>
+
+          {/* Right — floating info cards */}
+          <div className={styles.contactRight}>
+            <div className={styles.contactCard} style={{ '--card-delay': '0s' } as React.CSSProperties}>
+              <div className={styles.contactCardIcon} style={{ background: 'rgba(240,185,11,0.12)', color: '#f0b90b' }}>⚡</div>
+              <div>
+                <div className={styles.contactCardTitle}>Fast Response</div>
+                <div className={styles.contactCardDesc}>All tickets reviewed within 24 hours</div>
+              </div>
+            </div>
+            <div className={styles.contactCard} style={{ '--card-delay': '0.1s' } as React.CSSProperties}>
+              <div className={styles.contactCardIcon} style={{ background: 'rgba(14,203,129,0.12)', color: '#0ecb81' }}>🔒</div>
+              <div>
+                <div className={styles.contactCardTitle}>Private & Secure</div>
+                <div className={styles.contactCardDesc}>Messages go directly to our admin team</div>
+              </div>
+            </div>
+            <div className={styles.contactCard} style={{ '--card-delay': '0.2s' } as React.CSSProperties}>
+              <div className={styles.contactCardIcon} style={{ background: 'rgba(153,69,255,0.12)', color: '#9945ff' }}>🤖</div>
+              <div>
+                <div className={styles.contactCardTitle}>AI Chatbot</div>
+                <div className={styles.contactCardDesc}>Instant answers via our built-in assistant</div>
+              </div>
+            </div>
+            <div className={styles.contactCard} style={{ '--card-delay': '0.3s' } as React.CSSProperties}>
+              <div className={styles.contactCardIcon} style={{ background: 'rgba(0,170,228,0.12)', color: '#00aae4' }}>🐙</div>
+              <div>
+                <div className={styles.contactCardTitle}>Open Source</div>
+                <div className={styles.contactCardDesc}>
+                  <a href="https://github.com/Moiz2112/ExchangeGo" target="_blank" rel="noreferrer" className={styles.contactCardLink}>
+                    Report bugs on GitHub →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

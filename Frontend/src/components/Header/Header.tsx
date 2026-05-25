@@ -158,8 +158,10 @@ export default function Header() {
 
             {isLoggedIn ? (
               <div className={styles.userArea}>
-                <div className={styles.avatar}>{user?.username.charAt(0).toUpperCase()}</div>
-                <span className={styles.username}>{user?.username}</span>
+                <Link to="/profile" className={styles.profileLink} title="View profile">
+                  <div className={styles.avatar}>{user?.username.charAt(0).toUpperCase()}</div>
+                  <span className={styles.username}>{user?.username}</span>
+                </Link>
                 <button className={styles.logoutBtn} onClick={logout}>Sign Out</button>
               </div>
             ) : (

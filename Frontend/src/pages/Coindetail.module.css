@@ -765,3 +765,17 @@
   color: var(--red);
   border-bottom-color: var(--red);
 }
+
+.exchangeHeartBtn {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 1.3rem;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.exchangeHeartBtn:hover {
+  transform: scale(1.25);
+}

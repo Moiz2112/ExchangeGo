@@ -1,9 +1,13 @@
 import { useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
 import { RootState } from '../store';
+import { useConfig } from '../hooks/useConfig.ts';
+import { toggleFavorite } from '../utils/favorites';
 import styles from './Home.module.css';
 
-const COIN_META: Record<string, { emoji: string; name: string; color: string; bg: string; id: string }> = {
+// Fallback static metadata (used when backend is offline)
+const COIN_META_FALLBACK: Record<string, { emoji: string; name: string; color: string; bg: string; id: string }> = {
   BTC:  { emoji: '₿', name: 'Bitcoin',     color: '#f7931a', bg: 'rgba(247,147,26,0.12)',  id: 'bitcoin' },
   ETH:  { emoji: 'Ξ', name: 'Ethereum',    color: '#627eea', bg: 'rgba(98,126,234,0.12)',  id: 'ethereum' },
   ADA:  { emoji: '₳', name: 'Cardano',     color: '#3cc8c8', bg: 'rgba(60,200,200,0.12)',  id: 'cardano' },
@@ -16,10 +20,100 @@ const COIN_META: Record<string, { emoji: string; name: string; color: string; bg
   LINK: { emoji: '⬡', name: 'Chainlink',   color: '#2a5ada', bg: 'rgba(42,90,218,0.12)',   id: 'chainlink' },
 };
 
+// Derive a coin-id slug from ticker for routing
+const tickerToId = (ticker: string) =>
+  COIN_META_FALLBACK[ticker]?.id ?? ticker.toLowerCase();
+
 export default function Home() {
-  const rates = useSelector((s: RootState) => s.exchangeRates);
+  const rates    = useSelector((s: RootState) => s.exchangeRates);
   const navigate = useNavigate();
-  const loading = Object.keys(rates).length === 0;
+  const config   = useConfig();
+  const loading  = Object.keys(rates).length === 0;
+  const [favorites, setFavorites] = useState(new Set(
+    JSON.parse(localStorage.getItem('exchangego_favorites') || '[]')
+      .filter((f: { type: string }) => f.type === 'coin')
+      .map((f: { ticker?: string }) => f.ticker)
+  ));
+
+  // Build live meta: prefer DB data, fall back to hardcoded
+  const coinMeta = (ticker: string) => {
+    const fromDB = config.coins_meta.find(c => c.ticker === ticker);
+    const fallback = COIN_META_FALLBACK[ticker];
+    if (fromDB) {
+      return {
+        emoji: fromDB.emoji || fallback?.emoji || ticker[0],
+        name:  fromDB.name  || fallback?.name  || ticker,
+        color: fromDB.color || fallback?.color || '#ffffff',
+        bg:    (fromDB.color || fallback?.color || '#ffffff') + '22',
+        id:    tickerToId(ticker),
+      };
+    }
+    return fallback ?? { emoji: ticker[0], name: ticker, color: '#ffffff', bg: '#ffffff22', id: ticker.toLowerCase() };
+  };
+
+  // Order coins: follow display_order from DB if available, else original order
+  const enabledSet = new Set(config.enabled_coins.map(t => t.toUpperCase()));
+  const orderedTickers = Object.keys(rates)
+    .filter(ticker => enabledSet.has(ticker.toUpperCase()))
+    .sort((a, b) => {
+      const aOrder = config.coins_meta.find(c => c.ticker === a)?.display_order ?? 999;
+      const bOrder = config.coins_meta.find(c => c.ticker === b)?.display_order ?? 999;
+      return aOrder - bOrder;
+    });
+
+
+  // Group featured coins by category
+  const featuredByCategory = config.featured?.reduce((acc, coin) => {
+    if (!acc[coin.category]) acc[coin.category] = [];
+    acc[coin.category].push(coin.ticker);
+    return acc;
+  }, {} as Record<string, string[]>) || {};
+
+  const FeaturedSection = ({ label, icon, tickers }: { label: string; icon: string; tickers: string[] }) => {
+    if (tickers.length === 0) return null;
+
+    return (
+      <div className={styles.featuredSection}>
+        <div className={styles.featuredHeader}>
+          <h2 className={styles.featuredTitle}>{icon} {label}</h2>
+          <p className={styles.featuredSub}>Select coins to highlight on the homepage in each category</p>
+        </div>
+        <div className={styles.featuredGrid}>
+          {tickers.map((ticker) => {
+            const exchanges = rates[ticker];
+            if (!exchanges) return null;
+            const meta = coinMeta(ticker);
+
+            const valid = Object.entries(exchanges).filter(([, e]) => Number(e.price) > 0); 
+            const prices = valid.map(([, e]) => Number(e.price));
+            const avg = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
+
+            return (
+              <div
+                key={ticker}
+                className={styles.featuredCard}
+                onClick={() => navigate(`/coin/${meta.id}`)}
+                style={{ '--coin-color': meta.color } as React.CSSProperties}
+              >
+                <div className={styles.featuredCardTop}>
+                  <div className={styles.featuredIconWrap} style={{ background: meta.bg }}>
+                    <span className={styles.featuredCoinEmoji} style={{ color: meta.color }}>{meta.emoji}</span>
+                  </div>
+                  <div className={styles.featuredCoinInfo}>
+                    <span className={styles.featuredCoinName}>{meta.name}</span>
+                    <span className={styles.featuredCoinTicker} style={{ color: meta.color }}>{ticker}</span>
+                  </div>
+                </div>
+                <div className={styles.featuredPrice}>
+                  {avg > 0 ? `$${avg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.page}>
@@ -36,9 +130,10 @@ export default function Home() {
       <div className={styles.grid}>
         {loading
           ? [...Array(10)].map((_, i) => <div key={i} className={styles.skeleton} />)
-          : Object.entries(rates).map(([ticker, exchanges]) => {
-              const meta = COIN_META[ticker];
-              if (!meta) return null;
+          : orderedTickers.map((ticker) => {
+              const exchanges = rates[ticker];
+              if (!exchanges) return null;
+              const meta = coinMeta(ticker);
 
               const valid = Object.entries(exchanges).filter(([, e]) => Number(e.price) > 0); 
               const prices = valid.map(([, e]) => Number(e.price));
@@ -107,13 +202,37 @@ export default function Home() {
 
                   <div className={styles.cardFoot}>
                    <span className={styles.exCount}>{Object.keys(exchanges).length} exchanges</span>
-                    <span className={styles.viewTxt}>View Details →</span>
+                    <div className={styles.footRight}>
+                      <button
+                        className={`${styles.heartBtn} ${favorites.has(ticker) ? styles.heartActive : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const isFav = toggleFavorite('coin', ticker, { ticker, name: meta.name });
+                          const newFavs = new Set(favorites);
+                          if (isFav) {
+                            newFavs.add(ticker);
+                          } else {
+                            newFavs.delete(ticker);
+                          }
+                          setFavorites(newFavs);
+                        }}
+                        title={favorites.has(ticker) ? 'Remove from favorites' : 'Add to favorites'}
+                      >
+                        {favorites.has(ticker) ? '❤️' : '🤍'}
+                      </button>
+                      <span className={styles.viewTxt}>View Details →</span>
+                    </div>
                   </div>
                 </div>
               );
             })
         }
       </div>
+
+      {/* Featured Sections */}
+      <FeaturedSection label="Trending" icon="🔥" tickers={featuredByCategory['trending'] || []} />
+      <FeaturedSection label="Top Volume" icon="📊" tickers={featuredByCategory['top_volume'] || []} />
+      <FeaturedSection label="Recommended" icon="⭐" tickers={featuredByCategory['recommended'] || []} />
     </div>
   );
 }

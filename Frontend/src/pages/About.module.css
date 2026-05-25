@@ -471,9 +471,6 @@
   box-shadow: 0 10px 32px rgba(59,130,246,0.45);
 }
 
-/* Intersection observer trigger */
-.fadeInCard { }
-
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .hero        { flex-direction: column; }
@@ -487,4 +484,213 @@
   .stackGrid    { grid-template-columns: 1fr 1fr; }
   .statsBar     { flex-wrap: wrap; }
   .statItem     { min-width: 50%; border-bottom: 1px solid var(--border); }
+}
+
+/* ══════════════════════════════════════
+   Contact Us Section — redesigned
+   ══════════════════════════════════════ */
+.contactSection {
+  position: relative;
+  margin: 0 24px 80px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.contactBg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 80% at 0% 50%, rgba(240,185,11,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 100% 20%, rgba(153,69,255,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  animation: contactPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes contactPulse {
+  from { opacity: 0.6; transform: scale(1); }
+  to   { opacity: 1;   transform: scale(1.03); }
+}
+
+.contactInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  padding: 64px 56px;
+  flex-wrap: wrap;
+}
+
+/* ── Left ── */
+.contactLeft {
+  flex: 1;
+  min-width: 280px;
+  max-width: 460px;
+}
+
+.contactBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.contactTitle {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+  margin: 0 0 16px;
+}
+
+.contactAccent {
+  background: linear-gradient(135deg, var(--accent) 0%, #e67e00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.contactDesc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0 0 32px;
+  max-width: 380px;
+}
+
+.contactActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.contactChatBtn,
+.contactTicketBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  text-decoration: none;
+  border: none;
+}
+
+.contactChatBtn {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+.contactChatBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.contactTicketBtn {
+  background: var(--accent);
+  color: #000;
+  font-weight: 800;
+}
+.contactTicketBtn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(240,185,11,0.35);
+}
+
+.contactBtnIcon { font-size: 1rem; }
+
+/* ── Right ── */
+.contactRight {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 20px;
+  animation: slideInRight 0.5s ease both;
+  animation-delay: var(--card-delay, 0s);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contactCard:hover {
+  transform: translateX(6px);
+  border-color: var(--accent-border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.contactCardIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.contactCardTitle {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.contactCardDesc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.contactCardLink {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.76rem;
+  transition: opacity 0.15s;
+}
+.contactCardLink:hover { opacity: 0.7; }
+
+@media (max-width: 800px) {
+  .contactInner { padding: 40px 28px; gap: 36px; }
+  .contactLeft  { max-width: 100%; }
+}
+
+@media (max-width: 500px) {
+  .contactSection { margin: 0 12px 60px; border-radius: 18px; }
+  .contactInner { padding: 32px 20px; }
+  .contactActions { flex-direction: column; }
+  .contactChatBtn, .contactTicketBtn { justify-content: center; }
 }

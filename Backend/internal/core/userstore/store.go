@@ -53,9 +53,9 @@ func Init() {
         recorded_at TIMESTAMP DEFAULT NOW()
     )
   `)
-    if err != nil {
-       log.Fatalf("Failed to create price_history table: %v", err)
-   }
+	if err != nil {
+		log.Fatalf("Failed to create price_history table: %v", err)
+	}
 
 	GlobalStore = &Store{db: db}
 	log.Println("Database connected, users table and price_history table ready")
@@ -80,6 +80,14 @@ func (s *Store) FindByUsernameOrEmail(identifier string) *domain.User {
 		return nil
 	}
 	return &u
+}
+
+func (s *Store) UpdateUser(user domain.User) error {
+	_, err := s.db.Exec(
+		`UPDATE users SET password = $1 WHERE LOWER(username) = LOWER($2) OR LOWER(email) = LOWER($2)`,
+		user.HashedPassword, user.Username,
+	)
+	return err
 }
 
 func (s *Store) EmailExists(email string) bool {

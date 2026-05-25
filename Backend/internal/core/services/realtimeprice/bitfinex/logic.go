@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/registry"
 	"coinstrove/internal/core/userstore"
 	"strconv"
 )
@@ -24,12 +25,15 @@ func NewBitfinexService(priceRepo ports.PriceRepository, broadcaster ports.Broad
 }
 
 func (bitfinex *newBitfinexService) GetThePrice() {
+	if !registry.Global.IsExchangeEnabled("bitfinex") {
+		return
+	}
 	bitfinex.data = bitfinex.priceRepo.Get(consts.BITFINEX)
-	 for _, currency := range bitfinex.data.Data.Currencies {
-        if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
-            userstore.GlobalStore.SavePrice(string(consts.BITFINEX), currency.Name, price)
-        }
-    }
+	for _, currency := range bitfinex.data.Data.Currencies {
+		if price, err := strconv.ParseFloat(currency.Price, 64); err == nil {
+			userstore.GlobalStore.SavePrice(string(consts.BITFINEX), currency.Name, price)
+		}
+	}
 	bitfinex.BroadCast()
 	bitfinex.WriteToQue()
 }

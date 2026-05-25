@@ -198,7 +198,35 @@
 .signupBtn:hover { background: var(--accent-hover); }
 
 /* User area */
-.userArea { display: flex; align-items: center; gap: 8px; }
+.userArea { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
+.profileLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.profileLink:hover {
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.profileLink:hover .avatar {
+  background: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+.profileLink:hover .username {
+  color: var(--accent);
+}
 
 .avatar {
   width: 30px; height: 30px;
@@ -208,9 +236,19 @@
   font-size: 0.78rem;
   font-weight: 800;
   display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
 }
 
-.username { font-size: 0.84rem; font-weight: 600; color: #fff; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.username { 
+  font-size: 0.84rem; 
+  font-weight: 600; 
+  color: #fff; 
+  max-width: 120px; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+  transition: all 0.15s;
+}
 
 .logoutBtn {
   padding: 6px 14px;
