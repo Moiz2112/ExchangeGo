@@ -40,7 +40,7 @@ services:
     build: .
     hostname: dsvc
     ports:
-      - 8080:8080
+      - 8081:8081
     environment:
       - DB_URL=postgres://coinstrove:coinstrove123@postgres:5432/coinstrove?sslmode=disable
       - RABBITMQ_URL=amqp://guest:guest@queue:5672/
