@@ -87,7 +87,7 @@ const LoginModal = ({ onClose, onSuccess, message, defaultView = 'signin' }: Pro
     const res = await register(suEmail, suUsername, suPassword);
     setLoading(false);
     if (res.ok) {
-      setSuccess('Account created! Welcome to ExchangeGO.');
+      setSuccess('Account created! Welcome to Coinstrove.');
       setTimeout(() => { onSuccess?.(); handleClose(); }, 900);
     } else {
       setError(res.error || 'Registration failed.');
@@ -109,7 +109,7 @@ const LoginModal = ({ onClose, onSuccess, message, defaultView = 'signin' }: Pro
         {/* Logo */}
         <div className={styles.logoMark}>
           <span className={styles.logoDot} />
-          <span className={styles.logoText}>ExchangeGO</span>
+          <span className={styles.logoText}>Coinstrove</span>
         </div>
 
         {/* Tab switcher */}
@@ -171,7 +171,7 @@ const LoginModal = ({ onClose, onSuccess, message, defaultView = 'signin' }: Pro
           <div className={styles.formWrap}>
             <div className={styles.heading}>
               <h2 className={styles.title}>Create account</h2>
-              <p className={styles.subtitle}>Join ExchangeGO to track live crypto markets.</p>
+              <p className={styles.subtitle}>Join Coinstrove to track live crypto markets.</p>
             </div>
             <form onSubmit={handleSignUp} className={styles.form}>
               <div className={styles.field}>

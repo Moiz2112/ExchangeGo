@@ -143,7 +143,7 @@ export const ChatBot: React.FC = () => {
                 />
               </div>
               <div>
-                <div className={styles.headerTitle}>ExchangeGO Assistant</div>
+                <div className={styles.headerTitle}>Coinstrove Assistant</div>
                 <div className={styles.headerSubtitle}>
                   <span className={styles.onlineDot}></span> Online
                 </div>
