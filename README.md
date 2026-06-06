@@ -1,4 +1,4 @@
-# 🚀 ExchangeGO
+# 🚀 Coinstrove
 
 A real-time cryptocurrency exchange tracking platform with a scalable backend and modern frontend.
 
@@ -26,7 +26,7 @@ git clone <your-repo-url>
 ### 2. Navigate to Backend Directory
 
 ```bash
-cd ExchangeGO/Backend
+cd Coinstrove/Backend
 ```
 
 ### 3. Run Backend using Docker
@@ -91,7 +91,7 @@ http://localhost:5173
 ## 🔄 Project Structure
 
 ```
-ExchangeGO/
+Coinstrove/
 │
 ├── Backend/      # Golang backend (WebSocket + APIs)
 ├── Frontend/     # React + TypeScript frontend
