@@ -30,7 +30,7 @@ function Footer() {
   const [coinsOpen, setCoinsOpen] = useState(false);
 
   const openChatbot = () => {
-    window.dispatchEvent(new Event('exchangego:open-chatbot'));
+    window.dispatchEvent(new Event('coinstrove:open-chatbot'));
   };
 
   return (
@@ -39,11 +39,11 @@ function Footer() {
         <div className={styles.top}>
           <div className={styles.brandCol}>
             <Link to="/" className={styles.brand}>
-              <img src={logo} alt="ExchangeGO" className={styles.brandLogo} />
-              <span className={styles.brandText}>ExchangeGo</span>
+              <img src={logo} alt="Coinstrove" className={styles.brandLogo} />
+              <span className={styles.brandText}>Coinstrove</span>
             </Link>
             <p className={styles.description}>
-              ExchangeGo brings live crypto prices, exchange comparisons, and fast market insights together in one place.
+              Coinstrove brings live crypto prices, exchange comparisons, and fast market insights together in one place.
             </p>
 
             <div className={styles.socialRow}>
@@ -124,7 +124,7 @@ function Footer() {
         </div>
 
         <div className={styles.bottom}>
-          <p>© {new Date().getFullYear()} ExchangeGo. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Coinstrove. All rights reserved.</p>
           <div className={styles.bottomLinks}>
             <Link to="/about">About Us</Link>
             <Link to="/market">Market</Link>

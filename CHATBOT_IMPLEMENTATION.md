@@ -1,8 +1,8 @@
-# 🤖 ExchangeGO AI ChatBot - Complete Implementation Summary
+# 🤖 Coinstrove AI ChatBot - Complete Implementation Summary
 
 ## 📋 What Was Created
 
-I've built a complete, production-ready AI chatbot for your ExchangeGO platform with these components:
+I've built a complete, production-ready AI chatbot for your Coinstrove platform with these components:
 
 ### **Backend (Go)**
 - ✅ Core chatbot service with OpenAI GPT integration
@@ -115,7 +115,7 @@ cd ../Frontend && npm install
 ### 4. Update main.go
 Add this to your Backend/cmd/main.go:
 ```go
-import "exchangego/api/chatbot"
+import "Coinstrove/api/chatbot"
 
 // In main():
 openaiKey := os.Getenv("OPENAI_API_KEY")

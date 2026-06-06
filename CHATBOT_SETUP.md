@@ -1,7 +1,7 @@
-# ExchangeGO ChatBot Integration Guide
+# Coinstrove ChatBot Integration Guide
 
 ## 🎯 Overview
-This guide helps you integrate the AI chatbot into your ExchangeGO platform. The chatbot uses OpenAI's GPT models to answer questions about cryptocurrency exchanges, predict trends, and provide historical performance analysis.
+This guide helps you integrate the AI chatbot into your Coinstrove platform. The chatbot uses OpenAI's GPT models to answer questions about cryptocurrency exchanges, predict trends, and provide historical performance analysis.
 
 ---
 
@@ -52,7 +52,7 @@ import (
 	"os"
 	"net/http"
 	
-	chatbotAPI "exchangego/api/chatbot"
+	chatbotAPI "Coinstrove/api/chatbot"
 	// ... other imports
 )
 

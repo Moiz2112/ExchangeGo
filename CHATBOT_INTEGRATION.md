@@ -17,7 +17,7 @@
 ```go
 import (
     "os"
-    chatbotAPI "exchangego/api/chatbot"
+    chatbotAPI "Coinstrove/api/chatbot"
     // ... your other imports
 )
 ```

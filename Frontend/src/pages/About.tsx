@@ -86,7 +86,7 @@ const About = () => {
             <span className={styles.heroAccent}>who need the edge.</span>
           </h1>
           <p className={styles.heroDesc}>
-            ExchangeGo is a real-time cryptocurrency price aggregator that pulls live data
+            Coinstrove is a real-time cryptocurrency price aggregator that pulls live data
             from 9 major exchanges simultaneously — giving you instant visibility into
             price differences, arbitrage gaps, and market movements across the board.
           </p>
@@ -214,7 +214,7 @@ const About = () => {
             <div className={styles.contactActions}>
               <button
                 className={styles.contactChatBtn}
-                onClick={() => window.dispatchEvent(new Event('exchangego:open-chatbot'))}
+                onClick={() => window.dispatchEvent(new Event('coinstrove:open-chatbot'))}
               >
                 <span className={styles.contactBtnIcon}>💬</span>
                 Open Chatbot

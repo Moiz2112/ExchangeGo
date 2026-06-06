@@ -1,4 +1,4 @@
-# Testing the ExchangeGO ChatBot
+# Testing the Coinstrove ChatBot
 
 ## 🧪 Test Methods
 

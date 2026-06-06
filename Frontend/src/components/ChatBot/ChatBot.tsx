@@ -44,8 +44,8 @@ export const ChatBot: React.FC = () => {
 
   useEffect(() => {
     const openChatbot = () => setIsOpen(true);
-    window.addEventListener('exchangego:open-chatbot', openChatbot);
-    return () => window.removeEventListener('exchangego:open-chatbot', openChatbot);
+    window.addEventListener('coinstrove:open-chatbot', openChatbot);
+    return () => window.removeEventListener('coinstrove:open-chatbot', openChatbot);
   }, []);
 
   // Close on outside click

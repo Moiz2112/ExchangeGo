@@ -47,7 +47,7 @@ export default function Header() {
 
   const openLogin = (view: 'signin' | 'signup') => { setLoginView(view); setShowLogin(true); };
   const openChatbot = () => {
-    window.dispatchEvent(new Event('exchangego:open-chatbot'));
+    window.dispatchEvent(new Event('coinstrove:open-chatbot'));
   };
 
   return (
@@ -59,10 +59,10 @@ export default function Header() {
         <Link to="/" className={styles.logo}>
        <img 
          src={logo} 
-         alt="ExchangeGo Logo" 
+         alt="Coinstrove Logo" 
          className={styles.logoImage} 
        />
-  <span className={styles.logoName}>ExchangeGo</span>
+  <span className={styles.logoName}>Coinstrove</span>
 </Link>
 
           {/* Nav */}

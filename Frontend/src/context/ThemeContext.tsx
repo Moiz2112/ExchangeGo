@@ -11,12 +11,13 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    return (localStorage.getItem('exchangego_theme') as Theme) || 'dark';
+    const savedTheme = localStorage.getItem('coinstrove_theme') ?? localStorage.getItem('exchangego_theme');
+    return (savedTheme as Theme) || 'dark';
   });
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('exchangego_theme', theme);
+    localStorage.setItem('coinstrove_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');

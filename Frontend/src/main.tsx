@@ -17,7 +17,7 @@ import store from './store';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 
-const savedTheme = localStorage.getItem('exchangego_theme') || 'dark';
+const savedTheme = localStorage.getItem('coinstrove_theme') ?? localStorage.getItem('exchangego_theme') ?? 'dark';
 document.documentElement.setAttribute('data-theme', savedTheme);
 
 const router = createBrowserRouter([

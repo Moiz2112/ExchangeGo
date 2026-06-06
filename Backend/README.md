@@ -1,138 +1,68 @@
-# 🚀 ExchangeGO
+# ExchangeGO Backend
 
-A real-time cryptocurrency exchange tracking platform with a scalable backend and modern frontend.
+Backend service for the ExchangeGO cryptocurrency tracking platform.
 
----
+## Prerequisites
 
-## 📦 Prerequisites
+- Docker
+- Docker Compose
+- Go 1.23 or newer for local development
+- Node.js and npm if you also plan to run the frontend
 
-Make sure you have the following installed on your system:
+## Run the Backend
 
-* [Docker](https://www.docker.com/)
-* Docker Compose (usually bundled with Docker)
-* [Node.js](https://nodejs.org/) (v16 or higher recommended)
-* npm or yarn
-
----
-
-## 🛠️ Backend Setup
-
-### 1. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-```
-
-### 2. Navigate to Backend Directory
+1. Open a terminal in the backend folder:
 
 ```bash
 cd ExchangeGO/Backend
 ```
 
-### 3. Run Backend using Docker
+2. Start the services with Docker:
 
 ```bash
 docker-compose up --build
 ```
 
----
+This starts:
 
-### ⚙️ Backend Configuration
+- PostgreSQL on `localhost:5433`
+- RabbitMQ on `localhost:5672`
+- RabbitMQ management UI on `http://localhost:15672`
+- Backend API on `http://localhost:8081`
 
-Check your `docker-compose.yml` file for port configuration:
+## Environment Notes
 
-```yaml
-ports:
-  - "8080:8080"
-```
+The backend reads configuration from environment variables. `docker-compose.yml`
+already provides the database and RabbitMQ connection values.
 
-### 🌐 Backend URL
+If you use the chatbot features, make sure these are available:
 
-Once running, backend will be available at:
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
 
-```
-http://localhost:8080
-```
+## Run the Frontend
 
----
-
-## 💻 Frontend Setup
-
-### 1. Navigate to Frontend Directory
+From the project root:
 
 ```bash
-cd ../Frontend
-```
-
-### 2. Install Dependencies
-
-```bash
+cd Frontend
 npm install
-```
-
-### 3. Start Development Server
-
-```bash
 npm run dev
 ```
 
----
+The frontend development server runs on `http://localhost:5173`.
 
-### 🌐 Frontend URL
+## Project Structure
 
-Frontend will run at:
-
-```
-http://localhost:5173
-```
-
----
-
-## 🔄 Project Structure
-
-```
+```text
 ExchangeGO/
-│
-├── Backend/      # Golang backend (WebSocket + APIs)
-├── Frontend/     # React + TypeScript frontend
-└── README.md
+|-- Backend/
+|-- Frontend/
+`-- README.md
 ```
 
----
+## Notes
 
-## ⚡ Features
-
-* 📊 Real-time crypto price tracking
-* 🔌 WebSocket-based live updates
-* ⚛️ Modern React frontend with fast rendering
-* 🐳 Dockerized backend for easy deployment
-* 📡 Scalable architecture for multiple exchanges
-
----
-
-## 🚧 Development Notes
-
-* Ensure backend is running before starting frontend
-* WebSocket endpoint should match frontend configuration
-* Use `.env` files for environment-specific configs
-
----
-
-## 📌 Future Improvements
-
-* Authentication system
-* Advanced charting (TradingView integration)
-* AI-based price prediction module
-* Multi-exchange comparison dashboard
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to fork the repo and submit a pull request.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
+- Start the backend before opening the frontend.
+- The current frontend code expects the backend on port `8081`.
+- Keep secrets in local environment files and do not commit them.

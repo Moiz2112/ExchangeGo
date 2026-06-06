@@ -32,7 +32,7 @@ const downloadCSV = (rates: RootState['exchangeRates']) => {
   const csv = rows.map(r => r.join(',')).join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = `exchangego_prices_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `coinstrove_prices_${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
 };
 

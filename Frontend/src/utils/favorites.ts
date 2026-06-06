@@ -4,11 +4,12 @@ export interface FavoriteItem {
   type: 'coin' | 'exchange';
 }
 
-const FAVORITES_KEY = 'exchangego_favorites';
+const FAVORITES_KEY = 'coinstrove_favorites';
+const LEGACY_FAVORITES_KEY = 'exchangego_favorites';
 
 export function getFavorites(): FavoriteItem[] {
   try {
-    const saved = localStorage.getItem(FAVORITES_KEY);
+    const saved = localStorage.getItem(FAVORITES_KEY) ?? localStorage.getItem(LEGACY_FAVORITES_KEY);
     return saved ? JSON.parse(saved) : [];
   } catch {
     return [];

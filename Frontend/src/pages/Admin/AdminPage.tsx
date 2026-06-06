@@ -36,10 +36,10 @@ function AdminLogin() {
     <div className={styles.loginWrap}>
       <div className={styles.loginCard}>
         <div className={styles.loginLogo}>
-          <img src={logo} alt="ExchangeGo" className={styles.loginLogoImg} />
+          <img src={logo} alt="Coinstrove" className={styles.loginLogoImg} />
           <span className={styles.loginLogoText}>Admin Portal</span>
         </div>
-        <p className={styles.loginSub}>ExchangeGo Control Center</p>
+        <p className={styles.loginSub}>Coinstrove Control Center</p>
         <form onSubmit={handleSubmit} className={styles.loginForm}>
           <input
             className={styles.input}
@@ -639,9 +639,9 @@ function AdminShell() {
       {/* Sidebar */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarLogo}>
-          <img src={logo} alt="ExchangeGo" className={styles.sidebarLogoImg} />
+          <img src={logo} alt="Coinstrove" className={styles.sidebarLogoImg} />
           <div>
-            <div className={styles.sidebarLogoText}>ExchangeGo</div>
+            <div className={styles.sidebarLogoText}>Coinstrove</div>
             <div className={styles.sidebarLogoSub}>Admin Portal</div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { getFavorites, removeFavorite as removeStoredFavorite } from '../utils/favorites';
 import styles from './Profile.module.css';
 
 interface UserProfile {
@@ -10,19 +11,13 @@ interface UserProfile {
   created_at: string;
 }
 
-interface Favorite {
-  ticker?: string;
-  name?: string;
-  type: 'coin' | 'exchange';
-}
-
 export default function Profile() {
   const { isLoggedIn, user, logout } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [favorites, setFavorites] = useState<ReturnType<typeof getFavorites>>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'info' | 'favorites' | 'security'>('info');
@@ -61,10 +56,7 @@ export default function Profile() {
 
   const loadFavorites = () => {
     try {
-      const saved = localStorage.getItem('exchangego_favorites');
-      if (saved) {
-        setFavorites(JSON.parse(saved));
-      }
+      setFavorites(getFavorites());
     } catch (err) {
       console.error('Failed to load favorites', err);
     }
@@ -75,7 +67,7 @@ export default function Profile() {
       f => !(f.type === type && (f.ticker || f.name) === identifier)
     );
     setFavorites(updated);
-    localStorage.setItem('exchangego_favorites', JSON.stringify(updated));
+    removeStoredFavorite(type, identifier);
   };
 
   const handlePasswordReset = async (e: React.FormEvent) => {

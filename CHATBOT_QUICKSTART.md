@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide - ExchangeGO ChatBot
+# 🚀 Quick Start Guide - Coinstrove ChatBot
 
 ## 5-Minute Setup
 

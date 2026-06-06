@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { RootState } from '../store';
 import { useConfig } from '../hooks/useConfig.ts';
-import { toggleFavorite } from '../utils/favorites';
+import { getFavorites, toggleFavorite } from '../utils/favorites';
 import styles from './Home.module.css';
 
 // Fallback static metadata (used when backend is offline)
@@ -29,11 +29,15 @@ export default function Home() {
   const navigate = useNavigate();
   const config   = useConfig();
   const loading  = Object.keys(rates).length === 0;
-  const [favorites, setFavorites] = useState(new Set(
-    JSON.parse(localStorage.getItem('exchangego_favorites') || '[]')
-      .filter((f: { type: string }) => f.type === 'coin')
-      .map((f: { ticker?: string }) => f.ticker)
-  ));
+  const [favorites, setFavorites] = useState<Set<string>>(
+    () => new Set(
+      getFavorites()
+        .filter((favorite): favorite is { type: 'coin'; ticker: string } =>
+          favorite.type === 'coin' && typeof favorite.ticker === 'string'
+        )
+        .map((favorite) => favorite.ticker)
+    )
+  );
 
   // Build live meta: prefer DB data, fall back to hardcoded
   const coinMeta = (ticker: string) => {

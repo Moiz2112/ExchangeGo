@@ -75,11 +75,12 @@ const AdminContext = createContext<AdminContextType | null>(null);
 export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [admin, setAdmin] = useState<AdminUser | null>(() => {
     try {
-      const saved = localStorage.getItem('exchangego_admin');
+      const saved = localStorage.getItem('coinstrove_admin') ?? localStorage.getItem('exchangego_admin');
       if (!saved) return null;
       const parsed: AdminUser = JSON.parse(saved);
       const payload = JSON.parse(atob(parsed.token.split('.')[1]));
       if (payload.exp && Date.now() / 1000 > payload.exp) {
+        localStorage.removeItem('coinstrove_admin');
         localStorage.removeItem('exchangego_admin');
         return null;
       }
@@ -88,8 +89,11 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    if (admin) localStorage.setItem('exchangego_admin', JSON.stringify(admin));
-    else localStorage.removeItem('exchangego_admin');
+    if (admin) localStorage.setItem('coinstrove_admin', JSON.stringify(admin));
+    else {
+      localStorage.removeItem('coinstrove_admin');
+      localStorage.removeItem('exchangego_admin');
+    }
   }, [admin]);
 
   const login = async (username: string, password: string) => {
