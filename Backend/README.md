@@ -1,73 +1,138 @@
-# Coinscience Backend
+# 🚀 ExchangeGO
 
-Coinscience is a project that provides a backend implementation in Go for retrieving and comparing cryptocurrency prices across different exchanges. This backend allows viewers to see the price of a coin listed on various exchanges and find the exchange with the lowest price.
+A real-time cryptocurrency exchange tracking platform with a scalable backend and modern frontend.
 
-## Functionality
+---
 
-The backend code provides the following functionality:
+## 📦 Prerequisites
 
-- Retrieve the price of a specific coin from different exchanges.
-- Compare the prices across exchanges and identify the exchange with the lowest price.
-- Provide an API endpoint to retrieve the lowest price of a coin for a given exchange.
+Make sure you have the following installed on your system:
 
-## Project Structure
+* [Docker](https://www.docker.com/)
+* Docker Compose (usually bundled with Docker)
+* [Node.js](https://nodejs.org/) (v16 or higher recommended)
+* npm or yarn
 
-The backend code follows the hexagonal architecture design pattern, also known as the ports and adapters architecture. The project structure is organized as follows:
+---
 
-- `cmd/`: Contains the entry point(s) for the application.
-- `internal/`: Contains the core implementation of the application following the hexagonal architecture.
-  - `app/`: Implements the application logic, use cases, and business rules.
-  - `domain/`: Defines the domain models and interfaces.
-  - `infrastructure/`: Implements the adapters and infrastructure code (e.g., external API clients, database access).
-- `api/`: Contains the API handlers and routes for exposing the functionality to clients.
-- `pkg/`: Contains reusable packages and utilities.
-- `scripts/`: Contains scripts for building, testing, and other project-related tasks.
+## 🛠️ Backend Setup
 
-## Supported Exchanges
+### 1. Clone the Repository
 
-The backend currently supports the following cryptocurrency exchanges:
+```bash
+git clone <your-repo-url>
+```
 
-- Binance
-- Gate.io
-- Kraken
-- Bitfinex
-- Coinbase
+### 2. Navigate to Backend Directory
 
-## Technologies Used
+```bash
+cd ExchangeGO/Backend
+```
 
-The backend code is written in Go and utilizes the following technologies:
+### 3. Run Backend using Docker
 
-- Go programming language
-- RESTful API development
-- Third-party packages for interacting with the supported exchanges' APIs
+```bash
+docker-compose up --build
+```
 
-## Usage
+---
 
-To use the backend code for the Coinscience project, follow these steps:
+### ⚙️ Backend Configuration
 
-1. Clone the repository: `git clone https://github.com/UmarFarooq-MP/coinscience`
-2. Install the necessary dependencies using a package manager like `go mod tidy`.
-3. Run `docker-compose up -d` to up rabbitmttq in dockerize environment.
-4. Build and run the application using `go run cmd/main.go`.
-5. Try updating the mod file `go get -u ./...` if above does not work.
-6. To run locally you need rabbit mq which can be run on docker using these two commands
-    ~~~shell
-   docker network create rabbitmq_network
-   docker run -d --hostname queue --name rabbitmq --network rabbitmq_network -p 5672:5672 -p 15672:15672 rabbitmq:management
-   ~~~
-7. Also make sure to replace this line when running locally.
-   `quePublisher, err := publisher.NewRabbitMQPublisher("amqp://guest:guest@localhost:5672/")`
+Check your `docker-compose.yml` file for port configuration:
 
-## API Endpoints
-WORK IN PROGRESS
+```yaml
+ports:
+  - "8080:8080"
+```
 
-## Example Usage
-WORK IN PROGRESS
+### 🌐 Backend URL
 
-## Contribution
+Once running, backend will be available at:
 
-Contributions to the Coinscience project are welcome! If you find any issues or have suggestions for improvements, feel free to submit a pull request or create an issue on the [GitHub repository](https://github.com/UmarFarooq-MP/coinscience).
+```
+http://localhost:8080
+```
 
-## License
+---
 
-The Coinscience backend code is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+## 💻 Frontend Setup
+
+### 1. Navigate to Frontend Directory
+
+```bash
+cd ../Frontend
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Start Development Server
+
+```bash
+npm run dev
+```
+
+---
+
+### 🌐 Frontend URL
+
+Frontend will run at:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🔄 Project Structure
+
+```
+ExchangeGO/
+│
+├── Backend/      # Golang backend (WebSocket + APIs)
+├── Frontend/     # React + TypeScript frontend
+└── README.md
+```
+
+---
+
+## ⚡ Features
+
+* 📊 Real-time crypto price tracking
+* 🔌 WebSocket-based live updates
+* ⚛️ Modern React frontend with fast rendering
+* 🐳 Dockerized backend for easy deployment
+* 📡 Scalable architecture for multiple exchanges
+
+---
+
+## 🚧 Development Notes
+
+* Ensure backend is running before starting frontend
+* WebSocket endpoint should match frontend configuration
+* Use `.env` files for environment-specific configs
+
+---
+
+## 📌 Future Improvements
+
+* Authentication system
+* Advanced charting (TradingView integration)
+* AI-based price prediction module
+* Multi-exchange comparison dashboard
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to fork the repo and submit a pull request.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.

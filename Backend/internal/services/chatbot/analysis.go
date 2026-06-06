@@ -223,7 +223,7 @@ func main() {
     priceRepo := apirepository.NewAPIRepository()
 
     // Create services
-    chatService := chatbot.NewChatbotService(openaiKey)
+    chatService := chatbot.NewChatbotService(xaiKey, xaiModel)
     analysisService := chatbot.NewAnalysisService()
 
     // Create handler with dependencies

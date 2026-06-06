@@ -22,3 +22,8 @@ go.work
 .env
 .env.local
 .env.*.local
+node_modules/
+Mobile/node_modules/
+.env
+dist/
+build/

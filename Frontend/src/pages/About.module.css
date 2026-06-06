@@ -359,11 +359,13 @@
 /* ── Tech stack ── */
 .stackGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+  justify-content: center;
   gap: 16px;
 }
 
 .stackCard {
+  width: 100%;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -476,12 +478,10 @@
   .hero        { flex-direction: column; }
   .floatingPills { flex-direction: row; flex-wrap: wrap; justify-content: center; }
   .featuresGrid  { grid-template-columns: repeat(2, 1fr); }
-  .stackGrid     { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 600px) {
   .featuresGrid { grid-template-columns: 1fr; }
-  .stackGrid    { grid-template-columns: 1fr 1fr; }
   .statsBar     { flex-wrap: wrap; }
   .statItem     { min-width: 50%; border-bottom: 1px solid var(--border); }
 }

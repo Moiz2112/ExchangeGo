@@ -60,7 +60,6 @@ function AdminLogin() {
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
-        <p className={styles.loginHint}>Default: admin / admin123</p>
       </div>
     </div>
   );

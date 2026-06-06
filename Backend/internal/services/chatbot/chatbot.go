@@ -8,10 +8,16 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
+const (
+	defaultGroqBaseURL = "https://api.groq.com/openai/v1"
+	defaultGroqModel   = "llama-3.3-70b-versatile"
+)
+
 type ChatbotService struct {
 	client       *openai.Client
 	model        string
 	systemPrompt string
+	configured   bool
 }
 
 type ChatRequest struct {
@@ -26,11 +32,14 @@ type ChatResponse struct {
 }
 
 // NewChatbotService creates a new chatbot service instance
-func NewChatbotService(apiKey string) *ChatbotService {
+func NewChatbotService(apiKey, model string) *ChatbotService {
 	config := openai.DefaultConfig(apiKey)
-	config.BaseURL = "https://api.groq.com/openai/v1"
+	config.BaseURL = defaultGroqBaseURL
 	client := openai.NewClientWithConfig(config)
-    fmt.Println("api key ", apiKey)
+
+	if strings.TrimSpace(model) == "" {
+		model = defaultGroqModel
+	}
 
 	systemPrompt := `You are an AI assistant for ExchangeGO, a cryptocurrency exchange comparison platform.
 
@@ -58,13 +67,18 @@ func NewChatbotService(apiKey string) *ChatbotService {
 
 	return &ChatbotService{
 		client:       client,
-		model:        "llama-3.3-70b-versatile",
+		model:        model,
 		systemPrompt: systemPrompt,
+		configured:   strings.TrimSpace(apiKey) != "",
 	}
 }
 
 // ProcessMessage handles user messages and generates responses
 func (cs *ChatbotService) ProcessMessage(ctx context.Context, req *ChatRequest, exchangeContext string) (*ChatResponse, error) {
+	if !cs.configured {
+		return nil, fmt.Errorf("chatbot is not configured: missing OPENAI_API_KEY")
+	}
+
 	// Prepare messages with system prompt and context
 	messages := []openai.ChatCompletionMessage{
 		{
@@ -82,7 +96,7 @@ func (cs *ChatbotService) ProcessMessage(ctx context.Context, req *ChatRequest, 
 		Content: req.UserMessage,
 	})
 
-	// Call OpenAI API
+	// Call Groq Chat Completions API
 	resp, err := cs.client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
 		Model:       cs.model,
 		Messages:    messages,
@@ -91,11 +105,11 @@ func (cs *ChatbotService) ProcessMessage(ctx context.Context, req *ChatRequest, 
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("openai api error: %w", err)
+		return nil, fmt.Errorf("groq api error: %w", err)
 	}
 
 	if len(resp.Choices) == 0 {
-		return nil, fmt.Errorf("no response from openai")
+		return nil, fmt.Errorf("no response from groq")
 	}
 
 	assistantMessage := resp.Choices[0].Message.Content

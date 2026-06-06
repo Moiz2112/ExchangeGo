@@ -129,12 +129,16 @@ func main() {
 
 	// ChatBot
 	openaiKey := os.Getenv("OPENAI_API_KEY")
+	openaiModel := os.Getenv("OPENAI_MODEL")
 	if openaiKey == "" {
-		log.Println("WARNING: OPENAI_API_KEY not set — chatbot disabled")
+		log.Println("WARNING: OPENAI_API_KEY not set - chatbot disabled")
 	} else {
-		log.Printf("OpenAI key loaded (%d chars)", len(openaiKey))
+		log.Printf("Groq key loaded from OPENAI_API_KEY (%d chars)", len(openaiKey))
 	}
-	chatbot.RegisterRoutes(openaiKey)
+	if openaiModel != "" {
+		log.Printf("Chatbot model loaded from OPENAI_MODEL: %s", openaiModel)
+	}
+	chatbot.RegisterRoutes(openaiKey, openaiModel)
 
 	// Build dynamic service manager (reads from registry)
 	GlobalServiceManager = newServiceManager(broadCastManager, quePublisher)
