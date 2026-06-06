@@ -3,10 +3,11 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { RootState } from '../store';
+import type { CoinRates } from '../store/exchangeRatesSlice';
 import { useAuth } from '../context/AuthContext';
 import LoginModal from '../components/LoginModal/LoginModal';
-import { toggleFavorite } from '../utils/favorites';
-import styles from './CoinDetail.module.css';
+import { getFavorites, toggleFavorite } from '../utils/favorites';
+import styles from './Coindetail.module.css';
 
 // Maps URL coinId → ticker symbol stored in Redux
 const ID_TO_TICKER: Record<string, string> = {
@@ -55,6 +56,20 @@ interface HistoricalPoint {
   price: number;
 }
 
+interface CoinInfo {
+  market_cap_rank: number | null;
+  market_data?: {
+    price_change_percentage_24h?: number | null;
+  };
+}
+
+const getFavoriteExchangeNames = (): string[] =>
+  getFavorites()
+    .filter((favorite): favorite is { type: 'exchange'; name: string } =>
+      favorite.type === 'exchange' && typeof favorite.name === 'string'
+    )
+    .map((favorite) => favorite.name);
+
 const CoinDetail = () => {
   const { coinId } = useParams<{ coinId: string }>();
   const navigate = useNavigate();
@@ -65,19 +80,17 @@ const CoinDetail = () => {
   const rates = useSelector((state: RootState) => state.exchangeRates);
   const ticker = coinId ? ID_TO_TICKER[coinId] ?? coinId.toUpperCase() : '';
   const meta = COIN_META[ticker];
-  const coinRates = rates[ticker] ?? {};
+  const coinRates: CoinRates = rates[ticker] ?? {};
   const exchanges = Object.entries(coinRates);
 
   const [history, setHistory] = useState<HistoricalPoint[]>([]);
   const [loadingChart, setLoadingChart] = useState(true);
   const [pageLoading, setPageLoading] = useState(true);
   const [loadingText, setLoadingText] = useState('Connecting to markets…');
-  const [coinInfo, setCoinInfo] = useState<any>(null);
-  const [favExchanges, setFavExchanges] = useState(new Set(
-    JSON.parse(localStorage.getItem('exchangego_favorites') || '[]')
-      .filter((f: any) => f.type === 'exchange')
-      .map((f: any) => f.name)
-  ));
+  const [coinInfo, setCoinInfo] = useState<CoinInfo | null>(null);
+  const [favExchanges, setFavExchanges] = useState<Set<string>>(
+    () => new Set(getFavoriteExchangeNames())
+  );
 
   // Page loader — 2 second animated sequence before showing content
   useEffect(() => {
@@ -126,7 +139,7 @@ const CoinDetail = () => {
       await new Promise(r => setTimeout(r, 800));
 
       try {
-        const infoRes = await axios.get(
+        const infoRes = await axios.get<CoinInfo>(
           `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
         );
         setCoinInfo(infoRes.data);
